@@ -217,6 +217,8 @@ button:hover{
 .add-subject{
 
     margin-top:20px;
+
+    margin-bottom:20px;
 }
 
 .add-subject input{
@@ -236,6 +238,25 @@ button:hover{
     color:#5A6C79;
 
     text-align:left;
+}
+
+/* 기록 */
+
+.record-item{
+
+    background:white;
+
+    padding:15px;
+
+    border-radius:14px;
+
+    margin-bottom:12px;
+
+    color:#60707D;
+
+    font-size:18px;
+
+    box-shadow:0 2px 8px rgba(0,0,0,0.03);
 }
 
 .break{
@@ -302,6 +323,8 @@ button:hover{
 
         </div>
 
+        <div id="recordList"></div>
+
     </div>
 
 </div>
@@ -320,6 +343,10 @@ const minutesInput = document.getElementById("minutesInput");
 
 const message = document.getElementById("message");
 
+const subject = document.getElementById("subject");
+
+const recordList = document.getElementById("recordList");
+
 let time = 60;
 
 let breakTime = 600;
@@ -329,6 +356,11 @@ let interval;
 let running = false;
 
 let isBreak = false;
+
+/* 기록 저장 */
+
+let studyData =
+JSON.parse(localStorage.getItem("studyData")) || {};
 
 function updateTimer(){
 
@@ -341,6 +373,23 @@ function updateTimer(){
     seconds = String(seconds).padStart(2,"0");
 
     timer.innerText = `${minutes}:${seconds}`;
+}
+
+function updateRecords(){
+
+    recordList.innerHTML = "";
+
+    for(let subjectName in studyData){
+
+        const div = document.createElement("div");
+
+        div.className = "record-item";
+
+        div.innerText =
+        `${subjectName} : ${studyData[subjectName]}분`;
+
+        recordList.appendChild(div);
+    }
 }
 
 minutesInput.addEventListener("change", ()=>{
@@ -385,6 +434,31 @@ startBtn.addEventListener("click", ()=>{
             running = false;
 
             if(!isBreak){
+
+                let subjectName =
+                subject.value.trim();
+
+                if(subjectName === ""){
+
+                    subjectName = "기타";
+                }
+
+                let studyMinutes =
+                Number(minutesInput.value);
+
+                if(!studyData[subjectName]){
+
+                    studyData[subjectName] = 0;
+                }
+
+                studyData[subjectName] += studyMinutes;
+
+                localStorage.setItem(
+                    "studyData",
+                    JSON.stringify(studyData)
+                );
+
+                updateRecords();
 
                 document.body.classList.add("break");
 
@@ -450,6 +524,8 @@ resetBtn.addEventListener("click", ()=>{
 });
 
 updateTimer();
+
+updateRecords();
 
 </script>
 

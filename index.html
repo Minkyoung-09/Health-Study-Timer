@@ -26,7 +26,7 @@ body{
 
 .container{
 
-    width:420px;
+    width:500px;
 
     background:#FFFFFF;
 
@@ -55,16 +55,16 @@ p{
 
 .time-setting{
 
-    margin-bottom:25px;
+    margin-bottom:20px;
 
     color:#5F6F7C;
 
     font-size:18px;
 }
 
-input{
+select,input{
 
-    width:90px;
+    width:120px;
 
     padding:10px;
 
@@ -76,7 +76,7 @@ input{
 
     text-align:center;
 
-    font-size:18px;
+    font-size:16px;
 
     color:#4F6270;
 
@@ -101,6 +101,8 @@ input{
     justify-content:center;
 
     gap:12px;
+
+    margin-top:20px;
 }
 
 button{
@@ -159,6 +161,33 @@ button:hover{
     color:#6B7C88;
 }
 
+.study-record{
+
+    margin-top:30px;
+
+    text-align:left;
+
+    background:#F7FAFD;
+
+    padding:20px;
+
+    border-radius:15px;
+}
+
+.study-record h3{
+
+    margin-top:0;
+
+    color:#4B6475;
+}
+
+.study-record p{
+
+    margin:8px 0;
+
+    color:#5F6F7C;
+}
+
 .break{
 
     background:#EAF4FB;
@@ -177,6 +206,24 @@ button:hover{
     <p>조용한 환경을 위한 건강 중심 공부 타이머</p>
 
     <div class="time-setting">
+
+        과목 선택
+
+        <br><br>
+
+        <select id="subject">
+
+            <option value="수학">수학</option>
+
+            <option value="영어">영어</option>
+
+            <option value="국어">국어</option>
+
+            <option value="과학">과학</option>
+
+        </select>
+
+        <br><br>
 
         공부 시간 설정 (최대 50분)
 
@@ -206,6 +253,20 @@ button:hover{
 
     <div id="message"></div>
 
+    <div class="study-record">
+
+        <h3>오늘의 공부 기록</h3>
+
+        <p id="mathRecord">수학 : 0분</p>
+
+        <p id="englishRecord">영어 : 0분</p>
+
+        <p id="koreanRecord">국어 : 0분</p>
+
+        <p id="scienceRecord">과학 : 0분</p>
+
+    </div>
+
 </div>
 
 <script>
@@ -222,11 +283,36 @@ const minutesInput = document.getElementById("minutesInput");
 
 const message = document.getElementById("message");
 
+const subject = document.getElementById("subject");
+
 let time = 60;
 
 let interval;
 
 let running = false;
+
+let studyData = JSON.parse(localStorage.getItem("studyData")) || {
+
+    수학:0,
+    영어:0,
+    국어:0,
+    과학:0
+};
+
+function updateRecords(){
+
+    document.getElementById("mathRecord").innerText =
+    `수학 : ${studyData["수학"]}분`;
+
+    document.getElementById("englishRecord").innerText =
+    `영어 : ${studyData["영어"]}분`;
+
+    document.getElementById("koreanRecord").innerText =
+    `국어 : ${studyData["국어"]}분`;
+
+    document.getElementById("scienceRecord").innerText =
+    `과학 : ${studyData["과학"]}분`;
+}
 
 function updateTimer(){
 
@@ -282,6 +368,19 @@ startBtn.addEventListener("click", ()=>{
 
             running = false;
 
+            let selectedSubject = subject.value;
+
+            let studyMinutes = Number(minutesInput.value);
+
+            studyData[selectedSubject] += studyMinutes;
+
+            localStorage.setItem(
+                "studyData",
+                JSON.stringify(studyData)
+            );
+
+            updateRecords();
+
             document.body.classList.add("break");
 
             message.innerText = "눈을 쉬어주세요 😊";
@@ -317,6 +416,8 @@ resetBtn.addEventListener("click", ()=>{
 });
 
 updateTimer();
+
+updateRecords();
 
 </script>
 

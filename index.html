@@ -282,9 +282,13 @@ const subject = document.getElementById("subject");
 
 let time = 60;
 
+let breakTime = 10;
+
 let interval;
 
 let running = false;
+
+let isBreak = false;
 
 let studyData = JSON.parse(localStorage.getItem("studyData")) || {
 
@@ -363,22 +367,47 @@ startBtn.addEventListener("click", ()=>{
 
             running = false;
 
-            let selectedSubject = subject.value;
+            if(!isBreak){
 
-            let studyMinutes = Number(minutesInput.value);
+                let selectedSubject = subject.value;
 
-            studyData[selectedSubject] += studyMinutes;
+                let studyMinutes = Number(minutesInput.value);
 
-            localStorage.setItem(
-                "studyData",
-                JSON.stringify(studyData)
-            );
+                studyData[selectedSubject] += studyMinutes;
 
-            updateRecords();
+                localStorage.setItem(
+                    "studyData",
+                    JSON.stringify(studyData)
+                );
 
-            document.body.classList.add("break");
+                updateRecords();
 
-            message.innerText = "눈을 쉬어주세요 😊";
+                document.body.classList.add("break");
+
+                message.innerText = "눈을 쉬어주세요 😊";
+
+                isBreak = true;
+
+                time = breakTime;
+
+                updateTimer();
+
+                startBtn.click();
+
+            }else{
+
+                document.body.classList.remove("break");
+
+                message.innerText = "다시 공부를 시작하세요 📚";
+
+                isBreak = false;
+
+                let selected = Number(minutesInput.value);
+
+                time = selected * 60;
+
+                updateTimer();
+            }
         }
 
     },1000);
@@ -398,6 +427,8 @@ resetBtn.addEventListener("click", ()=>{
     clearInterval(interval);
 
     running = false;
+
+    isBreak = false;
 
     let selected = Number(minutesInput.value);
 

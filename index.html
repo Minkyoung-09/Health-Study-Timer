@@ -18,12 +18,12 @@ body{
 
     background:#EEF2F7;
 
-    font-family:Arial, sans-serif;
+    font-family:Arial,sans-serif;
 }
 
 .container{
 
-    width:430px;
+    width:420px;
 
     background:white;
 
@@ -31,58 +31,26 @@ body{
 
     border-radius:25px;
 
-    box-shadow:0 8px 25px rgba(0,0,0,0.08);
-
     text-align:center;
+
+    box-shadow:0 0 20px rgba(0,0,0,0.1);
 }
 
 h1{
-    color:#2E2E2E;
-    margin-bottom:10px;
+    color:#222;
 }
 
 p{
-    color:#777;
-    margin-bottom:25px;
-}
-
-.time-setting{
-
-    margin-bottom:25px;
-
-    font-size:18px;
-
-    color:#444;
-}
-
-input{
-
-    width:90px;
-
-    padding:10px;
-
-    border-radius:12px;
-
-    border:1px solid #D6DCE5;
-
-    text-align:center;
-
-    font-size:18px;
-
-    outline:none;
-
-    background:#FAFBFC;
+    color:#666;
 }
 
 #timer{
 
-    font-size:85px;
-
-    font-weight:bold;
+    font-size:80px;
 
     margin:30px 0;
 
-    color:#2B2B2B;
+    font-weight:bold;
 }
 
 .button-group{
@@ -91,70 +59,54 @@ input{
 
     justify-content:center;
 
-    gap:12px;
-
-    margin-top:20px;
+    gap:10px;
 }
 
 button{
 
-    padding:15px 25px;
-
     border:none;
 
-    border-radius:14px;
+    padding:15px 25px;
+
+    border-radius:12px;
 
     font-size:18px;
 
-    font-weight:bold;
-
     cursor:pointer;
-
-    transition:0.25s;
-}
-
-button:hover{
-
-    transform:scale(1.04);
-
-    opacity:0.92;
 }
 
 #startBtn{
-
     background:#B7E4C7;
-
-    color:#2D5A3D;
 }
 
 #pauseBtn{
-
     background:#F7D6BF;
-
-    color:#7A5A45;
 }
 
 #resetBtn{
-
     background:#F4B6C2;
+}
 
-    color:#7A3E4A;
+input{
+
+    width:80px;
+
+    padding:10px;
+
+    border-radius:10px;
+
+    border:1px solid #ccc;
+
+    text-align:center;
+
+    font-size:18px;
 }
 
 #message{
 
-    margin-top:25px;
-
-    min-height:30px;
-
-    font-size:20px;
+    margin-top:20px;
 
     color:#555;
-}
-
-.break{
-
-    background:#E8F7EC;
 }
 
 </style>
@@ -165,45 +117,31 @@ button:hover{
 
 <div class="container">
 
-    <h1>Silent Study Timer</h1>
+<h1>Silent Study Timer</h1>
 
-    <p>조용한 환경을 위한 건강 중심 공부 타이머</p>
+<p>조용한 환경을 위한 건강 중심 공부 타이머</p>
 
-    <div class="time-setting">
+<br>
 
-        공부 시간 설정 (최대 50분)
+<input type="number" id="minutesInput" value="1" min="1" max="50">
 
-        <br><br>
+분
 
-        <input type="number"
-               id="minutesInput"
-               min="1"
-               max="50"
-               value="1">
+<div id="timer">01:00</div>
 
-        분
+<div class="button-group">
 
-    </div>
+<button id="startBtn">시작</button>
 
-    <div id="timer">01:00</div>
+<button id="pauseBtn">정지</button>
 
-    <div class="button-group">
-
-        <button id="startBtn">시작</button>
-
-        <button id="pauseBtn">정지</button>
-
-        <button id="resetBtn">초기화</button>
-
-    </div>
-
-    <div id="message"></div>
+<button id="resetBtn">초기화</button>
 
 </div>
 
-<audio id="alarm">
-<source src="https://actions.google.com/sounds/v1/alarms/beep_short.ogg" type="audio/ogg">
-</audio>
+<div id="message"></div>
+
+</div>
 
 <script>
 
@@ -215,17 +153,15 @@ const pauseBtn = document.getElementById("pauseBtn");
 
 const resetBtn = document.getElementById("resetBtn");
 
-const message = document.getElementById("message");
-
-const alarm = document.getElementById("alarm");
-
 const minutesInput = document.getElementById("minutesInput");
+
+const message = document.getElementById("message");
 
 let time = 60;
 
-let running = false;
-
 let interval;
+
+let running = false;
 
 function updateTimer(){
 
@@ -239,6 +175,22 @@ function updateTimer(){
 
     timer.innerText = `${minutes}:${seconds}`;
 }
+
+minutesInput.addEventListener("change", ()=>{
+
+    let selected = Number(minutesInput.value);
+
+    if(selected > 50){
+
+        selected = 50;
+
+        minutesInput.value = 50;
+    }
+
+    time = selected * 60;
+
+    updateTimer();
+});
 
 startBtn.addEventListener("click", ()=>{
 
@@ -258,12 +210,6 @@ startBtn.addEventListener("click", ()=>{
 
             running = false;
 
-            document.body.classList.add("break");
-
-            alarm.volume = 0.1;
-
-            alarm.play();
-
             message.innerText = "눈을 쉬어주세요 😊";
         }
 
@@ -276,7 +222,7 @@ pauseBtn.addEventListener("click", ()=>{
 
     running = false;
 
-    message.innerText = "타이머가 정지되었습니다.";
+    message.innerText = "타이머 정지";
 });
 
 resetBtn.addEventListener("click", ()=>{
@@ -285,38 +231,13 @@ resetBtn.addEventListener("click", ()=>{
 
     running = false;
 
-    let selectedMinutes = Number(minutesInput.value);
+    let selected = Number(minutesInput.value);
 
-    if(selectedMinutes > 50){
-
-        selectedMinutes = 50;
-
-        minutesInput.value = 50;
-    }
-
-    time = selectedMinutes * 60;
+    time = selected * 60;
 
     updateTimer();
 
     message.innerText = "";
-
-    document.body.classList.remove("break");
-});
-
-minutesInput.addEventListener("change", ()=>{
-
-    let selectedMinutes = Number(minutesInput.value);
-
-    if(selectedMinutes > 50){
-
-        selectedMinutes = 50;
-
-        minutesInput.value = 50;
-    }
-
-    time = selectedMinutes * 60;
-
-    updateTimer();
 });
 
 updateTimer();

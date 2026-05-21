@@ -218,6 +218,34 @@ button:hover{
     color:#566B7A;
 }
 
+/* 과목 입력 */
+
+.add-subject{
+
+    margin-bottom:20px;
+}
+
+.add-subject input{
+
+    width:250px;
+
+    padding:12px;
+
+    border-radius:12px;
+
+    border:1px solid #D6E2EC;
+
+    background:white;
+
+    font-size:16px;
+
+    color:#5A6C79;
+
+    text-align:left;
+}
+
+/* 공부 기록 카드 */
+
 .record-item{
 
     background:#F5F9FC;
@@ -247,6 +275,7 @@ button:hover{
 
 <div class="container">
 
+    <!-- 왼쪽 -->
     <div class="left-panel">
 
         <h1>Silent Study Timer</h1>
@@ -254,16 +283,6 @@ button:hover{
         <p>조용한 환경을 위한 건강 중심 공부 타이머</p>
 
         <div class="time-setting">
-
-            과목 입력
-
-            <br><br>
-
-            <input type="text"
-                   id="subject"
-                   placeholder="예: 수학">
-
-            <br><br><br>
 
             공부 시간 설정 (최대 50분)
 
@@ -295,9 +314,18 @@ button:hover{
 
     </div>
 
+    <!-- 오른쪽 -->
     <div class="study-record">
 
         <h2>오늘의 공부 기록</h2>
+
+        <div class="add-subject">
+
+            <input type="text"
+                   id="subject"
+                   placeholder="과목 입력">
+
+        </div>
 
         <div id="recordList"></div>
 

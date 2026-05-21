@@ -1,16 +1,99 @@
-#startBtn{
-    background:#A8D5BA;
-    color:#2f4f3e;
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Silent Study Timer</title>
+
+<style>
+
+body{
+    margin:0;
+    height:100vh;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    background:#EEF2F7;
+
+    font-family:Arial, sans-serif;
 }
 
-#pauseBtn{
-    background:#F7D6BF;
-    color:#7a5a45;
+.container{
+
+    width:430px;
+
+    background:white;
+
+    padding:40px;
+
+    border-radius:25px;
+
+    box-shadow:0 8px 25px rgba(0,0,0,0.08);
+
+    text-align:center;
 }
 
-#resetBtn{
-    background:#F4B6C2;
-    color:#7a3e4a;
+h1{
+    color:#2E2E2E;
+    margin-bottom:10px;
+}
+
+p{
+    color:#777;
+    margin-bottom:25px;
+}
+
+.time-setting{
+
+    margin-bottom:25px;
+
+    font-size:18px;
+
+    color:#444;
+}
+
+input{
+
+    width:90px;
+
+    padding:10px;
+
+    border-radius:12px;
+
+    border:1px solid #D6DCE5;
+
+    text-align:center;
+
+    font-size:18px;
+
+    outline:none;
+
+    background:#FAFBFC;
+}
+
+#timer{
+
+    font-size:85px;
+
+    font-weight:bold;
+
+    margin:30px 0;
+
+    color:#2B2B2B;
+}
+
+.button-group{
+
+    display:flex;
+
+    justify-content:center;
+
+    gap:12px;
+
+    margin-top:20px;
 }
 
 button{
@@ -19,20 +102,226 @@ button{
 
     border:none;
 
-    border-radius:12px;
+    border-radius:14px;
 
     font-size:18px;
 
+    font-weight:bold;
+
     cursor:pointer;
 
-    transition:0.3s;
-
-    font-weight:bold;
+    transition:0.25s;
 }
 
 button:hover{
 
-    opacity:0.9;
+    transform:scale(1.04);
 
-    transform:scale(1.03);
+    opacity:0.92;
 }
+
+#startBtn{
+
+    background:#B7E4C7;
+
+    color:#2D5A3D;
+}
+
+#pauseBtn{
+
+    background:#F7D6BF;
+
+    color:#7A5A45;
+}
+
+#resetBtn{
+
+    background:#F4B6C2;
+
+    color:#7A3E4A;
+}
+
+#message{
+
+    margin-top:25px;
+
+    min-height:30px;
+
+    font-size:20px;
+
+    color:#555;
+}
+
+.break{
+
+    background:#E8F7EC;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Silent Study Timer</h1>
+
+    <p>조용한 환경을 위한 건강 중심 공부 타이머</p>
+
+    <div class="time-setting">
+
+        공부 시간 설정 (최대 50분)
+
+        <br><br>
+
+        <input type="number"
+               id="minutesInput"
+               min="1"
+               max="50"
+               value="1">
+
+        분
+
+    </div>
+
+    <div id="timer">01:00</div>
+
+    <div class="button-group">
+
+        <button id="startBtn">시작</button>
+
+        <button id="pauseBtn">정지</button>
+
+        <button id="resetBtn">초기화</button>
+
+    </div>
+
+    <div id="message"></div>
+
+</div>
+
+<audio id="alarm">
+<source src="https://actions.google.com/sounds/v1/alarms/beep_short.ogg" type="audio/ogg">
+</audio>
+
+<script>
+
+const timer = document.getElementById("timer");
+
+const startBtn = document.getElementById("startBtn");
+
+const pauseBtn = document.getElementById("pauseBtn");
+
+const resetBtn = document.getElementById("resetBtn");
+
+const message = document.getElementById("message");
+
+const alarm = document.getElementById("alarm");
+
+const minutesInput = document.getElementById("minutesInput");
+
+let time = 60;
+
+let running = false;
+
+let interval;
+
+function updateTimer(){
+
+    let minutes = Math.floor(time / 60);
+
+    let seconds = time % 60;
+
+    minutes = String(minutes).padStart(2,"0");
+
+    seconds = String(seconds).padStart(2,"0");
+
+    timer.innerText = `${minutes}:${seconds}`;
+}
+
+startBtn.addEventListener("click", ()=>{
+
+    if(running) return;
+
+    running = true;
+
+    interval = setInterval(()=>{
+
+        time--;
+
+        updateTimer();
+
+        if(time <= 0){
+
+            clearInterval(interval);
+
+            running = false;
+
+            document.body.classList.add("break");
+
+            alarm.volume = 0.1;
+
+            alarm.play();
+
+            message.innerText = "눈을 쉬어주세요 😊";
+        }
+
+    },1000);
+});
+
+pauseBtn.addEventListener("click", ()=>{
+
+    clearInterval(interval);
+
+    running = false;
+
+    message.innerText = "타이머가 정지되었습니다.";
+});
+
+resetBtn.addEventListener("click", ()=>{
+
+    clearInterval(interval);
+
+    running = false;
+
+    let selectedMinutes = Number(minutesInput.value);
+
+    if(selectedMinutes > 50){
+
+        selectedMinutes = 50;
+
+        minutesInput.value = 50;
+    }
+
+    time = selectedMinutes * 60;
+
+    updateTimer();
+
+    message.innerText = "";
+
+    document.body.classList.remove("break");
+});
+
+minutesInput.addEventListener("change", ()=>{
+
+    let selectedMinutes = Number(minutesInput.value);
+
+    if(selectedMinutes > 50){
+
+        selectedMinutes = 50;
+
+        minutesInput.value = 50;
+    }
+
+    time = selectedMinutes * 60;
+
+    updateTimer();
+});
+
+updateTimer();
+
+</script>
+
+</body>
+</html>

@@ -188,6 +188,8 @@ button:hover{
     border-radius:14px;
 }
 
+/* 오른쪽 */
+
 .study-record{
 
     flex:1;
@@ -201,8 +203,6 @@ button:hover{
     padding:25px;
 
     border:1px solid #E2EBF2;
-
-    overflow-y:auto;
 }
 
 .study-record h2{
@@ -212,11 +212,11 @@ button:hover{
     color:#566B7A;
 }
 
-/* 오른쪽 입력창 */
+/* 입력창 */
 
 .add-subject{
 
-    margin-bottom:20px;
+    margin-top:20px;
 }
 
 .add-subject input{
@@ -236,23 +236,6 @@ button:hover{
     color:#5A6C79;
 
     text-align:left;
-}
-
-/* 공부 기록 카드 */
-
-.record-item{
-
-    background:white;
-
-    padding:15px;
-
-    border-radius:14px;
-
-    margin-bottom:12px;
-
-    color:#60707D;
-
-    box-shadow:0 2px 8px rgba(0,0,0,0.03);
 }
 
 .break{
@@ -319,13 +302,13 @@ button:hover{
 
         </div>
 
-        <div id="recordList"></div>
-
     </div>
 
 </div>
 
 <script>
+
+localStorage.removeItem("studyData");
 
 const timer = document.getElementById("timer");
 
@@ -341,8 +324,6 @@ const message = document.getElementById("message");
 
 const subject = document.getElementById("subject");
 
-const recordList = document.getElementById("recordList");
-
 let time = 60;
 
 let breakTime = 600;
@@ -352,11 +333,6 @@ let interval;
 let running = false;
 
 let isBreak = false;
-
-/* 기본 과목 없음 */
-
-let studyData =
-JSON.parse(localStorage.getItem("studyData")) || {};
 
 function updateTimer(){
 
@@ -369,23 +345,6 @@ function updateTimer(){
     seconds = String(seconds).padStart(2,"0");
 
     timer.innerText = `${minutes}:${seconds}`;
-}
-
-function updateRecords(){
-
-    recordList.innerHTML = "";
-
-    for(let subjectName in studyData){
-
-        const div = document.createElement("div");
-
-        div.className = "record-item";
-
-        div.innerText =
-        `${subjectName} : ${studyData[subjectName]}분`;
-
-        recordList.appendChild(div);
-    }
 }
 
 minutesInput.addEventListener("change", ()=>{
@@ -430,30 +389,6 @@ startBtn.addEventListener("click", ()=>{
             running = false;
 
             if(!isBreak){
-
-                let subjectName = subject.value.trim();
-
-                if(subjectName === ""){
-
-                    subjectName = "기타";
-                }
-
-                let studyMinutes =
-                Number(minutesInput.value);
-
-                if(!studyData[subjectName]){
-
-                    studyData[subjectName] = 0;
-                }
-
-                studyData[subjectName] += studyMinutes;
-
-                localStorage.setItem(
-                    "studyData",
-                    JSON.stringify(studyData)
-                );
-
-                updateRecords();
 
                 document.body.classList.add("break");
 
@@ -519,8 +454,6 @@ resetBtn.addEventListener("click", ()=>{
 });
 
 updateTimer();
-
-updateRecords();
 
 </script>
 

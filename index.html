@@ -178,13 +178,9 @@ button:hover{
 
 <body>
 
-<!-- 작은 알림음 -->
-<audio id="alarmSound">
-
-<source
-src="https://actions.google.com/sounds/v1/alarms/beep_short.ogg"
-type="audio/ogg">
-
+<!-- 작은 알림 소리 -->
+<audio id="alarmSound" preload="auto">
+<source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8c8a73467.mp3?filename=correct-2-46134.mp3" type="audio/mp3">
 </audio>
 
 <div class="container">
@@ -374,7 +370,11 @@ startBtn.addEventListener("click", ()=>{
 
                 alarmSound.volume = 0.1;
 
-                alarmSound.play();
+                alarmSound.currentTime = 0;
+
+                alarmSound.play().catch(error => {
+                    console.log("소리 재생 실패:", error);
+                });
 
                 /* 휴식 시작 */
 

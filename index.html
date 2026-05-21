@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Silent Study Timer</title>
+
+  <style>
+    body{
+      margin:0;
+      padding:0;
+      background:#f4f7fb;
+      font-family:Arial, sans-serif;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      height:100vh;
+    }
+
+    .container{
+      width:400px;
+      background:white;
+      padding:40px;
+      border-radius:20px;
+      box-shadow:0 0 20px rgba(0,0,0,0.1);
+      text-align:center;
+    }
+
+    h1{
+      color:#333;
+      margin-bottom:10px;
+    }
+
+    p{
+      color:#666;
+      margin-bottom:30px;
+    }
+
+    #timer{
+      font-size:70px;
+      font-weight:bold;
+      margin-bottom:30px;
+      color:#222;
+    }
+
+    button{
+      padding:15px 30px;
+      border:none;
+      border-radius:10px;
+      font-size:18px;
+      cursor:pointer;
+      margin:5px;
+      transition:0.3s;
+    }
+
+    #startBtn{
+      background:#4CAF50;
+      color:white;
+    }
+
+    #resetBtn{
+      background:#f44336;
+      color:white;
+    }
+
+    button:hover{
+      opacity:0.8;
+    }
+
+    #message{
+      margin-top:25px;
+      font-size:20px;
+      color:#444;
+      min-height:30px;
+    }
+
+    .break{
+      background:#dfffe0;
+      transition:1s;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <h1>Silent Study Timer</h1>
+
+    <p>조용한 환경을 위한 건강 중심 공부 타이머</p>
+
+    <div id="timer">50:00</div>
+
+    <button id="startBtn">시작</button>
+    <button id="resetBtn">초기화</button>
+
+    <div id="message"></div>
+
+  </div>
+
+  <audio id="alarm">
+    <source src="https://actions.google.com/sounds/v1/alarms/beep_short.ogg" type="audio/ogg">
+  </audio>
+
+  <script>
+
+    let studyTime = 50 * 60;
+    let time = studyTime;
+
+    let timer = document.getElementById("timer");
+    let startBtn = document.getElementById("startBtn");
+    let resetBtn = document.getElementById("resetBtn");
+    let message = document.getElementById("message");
+    let alarm = document.getElementById("alarm");
+
+    let running = false;
+    let interval;
+
+    function updateTimer(){
+
+      let minutes = Math.floor(time / 60);
+      let seconds = time % 60;
+
+      minutes = String(minutes).padStart(2,'0');
+      seconds = String(seconds).padStart(2,'0');
+
+      timer.innerText = `${minutes}:${seconds}`;
+    }
+
+    startBtn.addEventListener("click", ()=>{
+
+      if(running) return;
+
+      running = true;
+
+      interval = setInterval(()=>{
+
+        time--;
+
+        updateTimer();
+
+        if(time <= 0){
+
+          clearInterval(interval);
+
+          alarm.volume = 0.1;
+          alarm.play();
+
+          document.body.classList.add("break");
+
+          message.innerText = "눈을 쉬어주세요 😊";
+
+          running = false;
+        }
+
+      },1000);
+
+    });
+
+    resetBtn.addEventListener("click", ()=>{
+
+      clearInterval(interval);
+
+      running = false;
+
+      time = studyTime;
+
+      updateTimer();
+
+      message.innerText = "";
+
+      document.body.classList.remove("break");
+
+    });
+
+  </script>
+
+</body>
+</html>

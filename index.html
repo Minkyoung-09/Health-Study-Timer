@@ -15,10 +15,11 @@
       justify-content:center;
       align-items:center;
       height:100vh;
+      transition:1s;
     }
 
     .container{
-      width:400px;
+      width:420px;
       background:white;
       padding:40px;
       border-radius:20px;
@@ -33,18 +34,31 @@
 
     p{
       color:#666;
-      margin-bottom:30px;
+      margin-bottom:20px;
     }
 
     #timer{
       font-size:70px;
       font-weight:bold;
-      margin-bottom:30px;
+      margin-bottom:25px;
       color:#222;
     }
 
+    .time-setting{
+      margin-bottom:20px;
+    }
+
+    input{
+      width:80px;
+      padding:10px;
+      font-size:18px;
+      text-align:center;
+      border-radius:10px;
+      border:1px solid #ccc;
+    }
+
     button{
-      padding:15px 30px;
+      padding:15px 25px;
       border:none;
       border-radius:10px;
       font-size:18px;
@@ -76,8 +90,8 @@
 
     .break{
       background:#dfffe0;
-      transition:1s;
     }
+
   </style>
 </head>
 
@@ -88,6 +102,13 @@
     <h1>Silent Study Timer</h1>
 
     <p>조용한 환경을 위한 건강 중심 공부 타이머</p>
+
+    <div class="time-setting">
+      공부 시간 설정 (최대 50분)<br><br>
+
+      <input type="number" id="minutesInput" min="1" max="50" value="50">
+      분
+    </div>
 
     <div id="timer">50:00</div>
 
@@ -104,14 +125,14 @@
 
   <script>
 
-    let studyTime = 50 * 60;
-    let time = studyTime;
-
     let timer = document.getElementById("timer");
     let startBtn = document.getElementById("startBtn");
     let resetBtn = document.getElementById("resetBtn");
     let message = document.getElementById("message");
     let alarm = document.getElementById("alarm");
+    let minutesInput = document.getElementById("minutesInput");
+
+    let time = 50 * 60;
 
     let running = false;
     let interval;
@@ -130,6 +151,17 @@
     startBtn.addEventListener("click", ()=>{
 
       if(running) return;
+
+      let selectedMinutes = Number(minutesInput.value);
+
+      if(selectedMinutes > 50){
+        alert("최대 50분까지 설정 가능합니다.");
+        return;
+      }
+
+      time = selectedMinutes * 60;
+
+      updateTimer();
 
       running = true;
 
@@ -163,7 +195,9 @@
 
       running = false;
 
-      time = studyTime;
+      let selectedMinutes = Number(minutesInput.value);
+
+      time = selectedMinutes * 60;
 
       updateTimer();
 
@@ -172,6 +206,8 @@
       document.body.classList.remove("break");
 
     });
+
+    updateTimer();
 
   </script>
 

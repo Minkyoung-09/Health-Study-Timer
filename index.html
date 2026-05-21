@@ -178,11 +178,6 @@ button:hover{
 
 <body>
 
-<!-- 작은 알림 소리 -->
-<audio id="alarmSound" preload="auto">
-<source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8c8a73467.mp3?filename=correct-2-46134.mp3" type="audio/mp3">
-</audio>
-
 <div class="container">
 
     <!-- 왼쪽 -->
@@ -255,11 +250,6 @@ const message = document.getElementById("message");
 const subject = document.getElementById("subject");
 const recordList = document.getElementById("recordList");
 
-/* 소리 */
-
-const alarmSound =
-document.getElementById("alarmSound");
-
 let time = 60;
 let breakTime = 600;
 
@@ -271,6 +261,37 @@ let isBreak = false;
 
 let studyData =
 JSON.parse(localStorage.getItem("studyData")) || {};
+
+/* 작은 삐 소리 */
+
+function playBeep(){
+
+    const audioContext =
+    new (window.AudioContext ||
+    window.webkitAudioContext)();
+
+    const oscillator =
+    audioContext.createOscillator();
+
+    const gainNode =
+    audioContext.createGain();
+
+    oscillator.connect(gainNode);
+
+    gainNode.connect(audioContext.destination);
+
+    oscillator.type = "sine";
+
+    oscillator.frequency.value = 700;
+
+    gainNode.gain.value = 0.03;
+
+    oscillator.start();
+
+    oscillator.stop(
+        audioContext.currentTime + 0.2
+    );
+}
 
 function updateTimer(){
 
@@ -366,15 +387,9 @@ startBtn.addEventListener("click", ()=>{
 
                 updateRecords();
 
-                /* 작은 소리 */
+                /* 작은 소리 실행 */
 
-                alarmSound.volume = 0.1;
-
-                alarmSound.currentTime = 0;
-
-                alarmSound.play().catch(error => {
-                    console.log("소리 재생 실패:", error);
-                });
+                playBeep();
 
                 /* 휴식 시작 */
 

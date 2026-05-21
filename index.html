@@ -11,22 +11,24 @@
 
 body{
     margin:0;
+    padding:0;
+
     height:100vh;
 
     display:flex;
     justify-content:center;
     align-items:center;
 
-    background:#F3F7FB;
+    background:#F4F8FC;
 
-    font-family:Arial,sans-serif;
+    font-family:Arial, sans-serif;
 }
 
 .container{
 
     width:420px;
 
-    background:#FCFEFF;
+    background:#FFFFFF;
 
     padding:40px;
 
@@ -34,26 +36,62 @@ body{
 
     text-align:center;
 
-    box-shadow:0 0 20px rgba(0,0,0,0.08);
+    box-shadow:0 8px 25px rgba(0,0,0,0.08);
 }
 
 h1{
-    color:#3F5366;
+
+    color:#4A6170;
+
+    margin-bottom:10px;
 }
 
 p{
-    color:#72808E;
+
+    color:#7A8A97;
+
+    margin-bottom:25px;
+}
+
+.time-setting{
+
+    margin-bottom:25px;
+
+    color:#5F6F7C;
+
+    font-size:18px;
+}
+
+input{
+
+    width:90px;
+
+    padding:10px;
+
+    border-radius:12px;
+
+    border:1px solid #D6E2EC;
+
+    background:#F9FBFD;
+
+    text-align:center;
+
+    font-size:18px;
+
+    color:#4F6270;
+
+    outline:none;
 }
 
 #timer{
 
     font-size:80px;
 
-    margin:30px 0;
-
     font-weight:bold;
 
-    color:#44576A;
+    color:#435866;
+
+    margin:30px 0;
 }
 
 .button-group{
@@ -62,7 +100,7 @@ p{
 
     justify-content:center;
 
-    gap:10px;
+    gap:12px;
 }
 
 button{
@@ -71,63 +109,59 @@ button{
 
     padding:15px 25px;
 
-    border-radius:12px;
+    border-radius:14px;
 
     font-size:18px;
+
+    font-weight:600;
 
     cursor:pointer;
 
     transition:0.2s;
-
-    font-weight:500;
 }
 
 button:hover{
 
-    opacity:0.9;
+    transform:scale(1.03);
 
-    transform:scale(1.02);
+    opacity:0.92;
 }
 
 #startBtn{
+
     background:#D6EAF8;
-    color:#4A6572;
+
+    color:#4B6475;
 }
 
 #pauseBtn{
-    background:#DCEEF2;
-    color:#4E6A73;
+
+    background:#DDEBF5;
+
+    color:#506876;
 }
 
 #resetBtn{
-    background:#E3EDF7;
-    color:#5B6B7A;
-}
 
-input{
+    background:#E5EEF7;
 
-    width:80px;
-
-    padding:10px;
-
-    border-radius:10px;
-
-    border:1px solid #D5E3EE;
-
-    text-align:center;
-
-    font-size:18px;
-
-    background:#F7FAFC;
-
-    color:#556270;
+    color:#5B6F80;
 }
 
 #message{
 
-    margin-top:20px;
+    margin-top:25px;
 
-    color:#667788;
+    min-height:30px;
+
+    font-size:20px;
+
+    color:#6B7C88;
+}
+
+.break{
+
+    background:#EAF4FB;
 }
 
 </style>
@@ -138,33 +172,39 @@ input{
 
 <div class="container">
 
-<h1>Silent Study Timer</h1>
+    <h1>Silent Study Timer</h1>
 
-<p>조용한 환경을 위한 건강 중심 공부 타이머</p>
+    <p>조용한 환경을 위한 건강 중심 공부 타이머</p>
 
-<br>
+    <div class="time-setting">
 
-<input type="number"
-       id="minutesInput"
-       value="1"
-       min="1"
-       max="50">
+        공부 시간 설정 (최대 50분)
 
-분
+        <br><br>
 
-<div id="timer">01:00</div>
+        <input type="number"
+               id="minutesInput"
+               min="1"
+               max="50"
+               value="1">
 
-<div class="button-group">
+        분
 
-<button id="startBtn">시작</button>
+    </div>
 
-<button id="pauseBtn">정지</button>
+    <div id="timer">01:00</div>
 
-<button id="resetBtn">초기화</button>
+    <div class="button-group">
 
-</div>
+        <button id="startBtn">시작</button>
 
-<div id="message"></div>
+        <button id="pauseBtn">정지</button>
+
+        <button id="resetBtn">초기화</button>
+
+    </div>
+
+    <div id="message"></div>
 
 </div>
 
@@ -212,6 +252,13 @@ minutesInput.addEventListener("change", ()=>{
         minutesInput.value = 50;
     }
 
+    if(selected < 1){
+
+        selected = 1;
+
+        minutesInput.value = 1;
+    }
+
     time = selected * 60;
 
     updateTimer();
@@ -234,6 +281,8 @@ startBtn.addEventListener("click", ()=>{
             clearInterval(interval);
 
             running = false;
+
+            document.body.classList.add("break");
 
             message.innerText = "눈을 쉬어주세요 😊";
         }
@@ -263,6 +312,8 @@ resetBtn.addEventListener("click", ()=>{
     updateTimer();
 
     message.innerText = "";
+
+    document.body.classList.remove("break");
 });
 
 updateTimer();
@@ -270,4 +321,5 @@ updateTimer();
 </script>
 
 </body>
+
 </html>

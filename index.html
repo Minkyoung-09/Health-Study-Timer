@@ -12,41 +12,26 @@
 body{
     margin:0;
     padding:40px;
-
     min-height:100vh;
-
     background:#EEF4F8;
-
     font-family:Arial, sans-serif;
-
     box-sizing:border-box;
 }
 
 .container{
-
     width:1100px;
-
     margin:auto;
-
     display:flex;
-
     gap:30px;
-
     align-items:flex-start;
-
     background:#FDFEFE;
-
     padding:40px;
-
     border-radius:25px;
-
     box-shadow:0 8px 25px rgba(120,140,160,0.12);
-
     border:1px solid #E3ECF3;
 }
 
 .left-panel{
-
     width:430px;
 }
 
@@ -61,201 +46,125 @@ p{
 }
 
 .time-setting{
-
     margin-bottom:20px;
-
     color:#6C7C88;
-
     font-size:18px;
-
     background:#F5F9FC;
-
     padding:20px;
-
     border-radius:18px;
 }
 
 input{
-
     width:150px;
-
     padding:10px;
-
     border-radius:12px;
-
     border:1px solid #D6E2EC;
-
     background:#FAFCFE;
-
     text-align:center;
-
     font-size:16px;
-
     color:#5A6C79;
-
     outline:none;
 }
 
 #timer{
-
     font-size:90px;
-
     font-weight:bold;
-
     color:#435866;
-
     margin:30px 0;
-
     background:white;
-
     border-radius:20px;
-
     padding:20px;
-
     text-align:center;
-
     box-shadow:0 2px 10px rgba(0,0,0,0.04);
 }
 
 .button-group{
-
     display:flex;
-
     gap:12px;
-
     margin-top:20px;
 }
 
 button{
-
     border:none;
-
     padding:15px 25px;
-
     border-radius:14px;
-
     font-size:18px;
-
     font-weight:600;
-
     cursor:pointer;
-
     transition:0.2s;
 }
 
 button:hover{
-
     transform:scale(1.03);
-
     opacity:0.92;
 }
 
 #startBtn{
-
     background:#D7EAF6;
-
     color:#4F6573;
 }
 
 #pauseBtn{
-
     background:#E1EEF5;
-
     color:#5A6F7D;
 }
 
 #resetBtn{
-
     background:#EDF3F8;
-
     color:#647887;
 }
 
 #message{
-
     margin-top:25px;
-
     min-height:30px;
-
     font-size:20px;
-
     color:#6F7F8B;
-
     background:#F6FAFD;
-
     padding:12px;
-
     border-radius:14px;
 }
 
 /* 오른쪽 */
 
 .study-record{
-
     flex:1;
-
     min-height:600px;
-
     background:#F5F9FC;
-
     border-radius:20px;
-
     padding:25px;
-
     border:1px solid #E2EBF2;
 }
 
 .study-record h2{
-
     margin-top:0;
-
     color:#566B7A;
 }
 
-/* 입력창 */
-
 .add-subject{
-
     margin-top:20px;
-
     margin-bottom:20px;
 }
 
 .add-subject input{
-
     width:250px;
-
     padding:12px;
-
     border-radius:12px;
-
     border:1px solid #D6E2EC;
-
     background:white;
-
     font-size:16px;
-
     color:#5A6C79;
-
     text-align:left;
 }
 
-/* 기록 */
+/* 기록 카드 */
 
 .record-item{
-
     background:white;
-
     padding:15px;
-
     border-radius:14px;
-
     margin-bottom:12px;
-
     color:#60707D;
-
     font-size:18px;
-
     box-shadow:0 2px 8px rgba(0,0,0,0.03);
 }
 
@@ -268,6 +177,15 @@ button:hover{
 </head>
 
 <body>
+
+<!-- 작은 알림음 -->
+<audio id="alarmSound">
+
+<source
+src="https://actions.google.com/sounds/v1/alarms/beep_short.ogg"
+type="audio/ogg">
+
+</audio>
 
 <div class="container">
 
@@ -323,6 +241,7 @@ button:hover{
 
         </div>
 
+        <!-- 기록 출력 -->
         <div id="recordList"></div>
 
     </div>
@@ -332,32 +251,27 @@ button:hover{
 <script>
 
 const timer = document.getElementById("timer");
-
 const startBtn = document.getElementById("startBtn");
-
 const pauseBtn = document.getElementById("pauseBtn");
-
 const resetBtn = document.getElementById("resetBtn");
-
 const minutesInput = document.getElementById("minutesInput");
-
 const message = document.getElementById("message");
-
 const subject = document.getElementById("subject");
-
 const recordList = document.getElementById("recordList");
 
-let time = 60;
+/* 소리 */
 
+const alarmSound =
+document.getElementById("alarmSound");
+
+let time = 60;
 let breakTime = 600;
 
 let interval;
-
 let running = false;
-
 let isBreak = false;
 
-/* 기록 저장 */
+/* 공부 기록 저장 */
 
 let studyData =
 JSON.parse(localStorage.getItem("studyData")) || {};
@@ -365,11 +279,9 @@ JSON.parse(localStorage.getItem("studyData")) || {};
 function updateTimer(){
 
     let minutes = Math.floor(time / 60);
-
     let seconds = time % 60;
 
     minutes = String(minutes).padStart(2,"0");
-
     seconds = String(seconds).padStart(2,"0");
 
     timer.innerText = `${minutes}:${seconds}`;
@@ -397,16 +309,12 @@ minutesInput.addEventListener("change", ()=>{
     let selected = Number(minutesInput.value);
 
     if(selected > 50){
-
         selected = 50;
-
         minutesInput.value = 50;
     }
 
     if(selected < 1){
-
         selected = 1;
-
         minutesInput.value = 1;
     }
 
@@ -435,19 +343,21 @@ startBtn.addEventListener("click", ()=>{
 
             if(!isBreak){
 
+                /* 과목명 */
+
                 let subjectName =
                 subject.value.trim();
 
                 if(subjectName === ""){
-
                     subjectName = "기타";
                 }
+
+                /* 공부 시간 저장 */
 
                 let studyMinutes =
                 Number(minutesInput.value);
 
                 if(!studyData[subjectName]){
-
                     studyData[subjectName] = 0;
                 }
 
@@ -459,6 +369,14 @@ startBtn.addEventListener("click", ()=>{
                 );
 
                 updateRecords();
+
+                /* 작은 소리 */
+
+                alarmSound.volume = 0.1;
+
+                alarmSound.play();
+
+                /* 휴식 시작 */
 
                 document.body.classList.add("break");
 
@@ -524,7 +442,6 @@ resetBtn.addEventListener("click", ()=>{
 });
 
 updateTimer();
-
 updateRecords();
 
 </script>

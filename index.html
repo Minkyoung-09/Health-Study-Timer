@@ -11,7 +11,7 @@
 
 body{
     margin:0;
-    padding:40px;
+    padding:30px;
 
     min-height:100vh;
 
@@ -24,40 +24,42 @@ body{
 
 .container{
 
-    width:1100px;
-
-    margin:auto;
-
     display:flex;
 
-    gap:30px;
+    gap:25px;
 
     align-items:flex-start;
-
-    background:#FDFEFE;
-
-    padding:40px;
-
-    border-radius:25px;
-
-    box-shadow:0 8px 25px rgba(120,140,160,0.12);
-
-    border:1px solid #E3ECF3;
 }
+
+/* 왼쪽 타이머 */
 
 .left-panel{
 
-    width:430px;
+    width:340px;
+
+    background:#FDFEFE;
+
+    padding:25px;
+
+    border-radius:22px;
+
+    box-shadow:0 6px 20px rgba(120,140,160,0.10);
+
+    border:1px solid #E3ECF3;
 }
 
 h1{
     color:#526777;
     margin-bottom:10px;
+
+    font-size:28px;
 }
 
 p{
     color:#7B8C99;
-    margin-bottom:25px;
+    margin-bottom:20px;
+
+    font-size:15px;
 }
 
 .time-setting{
@@ -66,18 +68,18 @@ p{
 
     color:#6C7C88;
 
-    font-size:18px;
+    font-size:16px;
 
     background:#F5F9FC;
 
-    padding:20px;
+    padding:18px;
 
-    border-radius:18px;
+    border-radius:16px;
 }
 
 input{
 
-    width:150px;
+    width:140px;
 
     padding:10px;
 
@@ -89,7 +91,7 @@ input{
 
     text-align:center;
 
-    font-size:16px;
+    font-size:15px;
 
     color:#5A6C79;
 
@@ -98,19 +100,19 @@ input{
 
 #timer{
 
-    font-size:90px;
+    font-size:60px;
 
     font-weight:bold;
 
     color:#435866;
 
-    margin:30px 0;
+    margin:25px 0;
 
     background:white;
 
-    border-radius:20px;
+    border-radius:18px;
 
-    padding:20px;
+    padding:18px;
 
     text-align:center;
 
@@ -121,20 +123,22 @@ input{
 
     display:flex;
 
-    gap:12px;
+    flex-wrap:wrap;
 
-    margin-top:20px;
+    gap:10px;
+
+    margin-top:15px;
 }
 
 button{
 
     border:none;
 
-    padding:15px 25px;
+    padding:12px 20px;
 
-    border-radius:14px;
+    border-radius:12px;
 
-    font-size:18px;
+    font-size:16px;
 
     font-weight:600;
 
@@ -173,11 +177,11 @@ button:hover{
 
 #message{
 
-    margin-top:25px;
+    margin-top:20px;
 
-    min-height:30px;
+    min-height:25px;
 
-    font-size:20px;
+    font-size:17px;
 
     color:#6F7F8B;
 
@@ -188,21 +192,23 @@ button:hover{
     border-radius:14px;
 }
 
+/* 오른쪽 기록 */
+
 .study-record{
 
     flex:1;
 
-    min-height:600px;
+    min-height:700px;
 
-    background:#F5F9FC;
+    background:#FDFEFE;
 
-    border-radius:20px;
+    border-radius:22px;
 
-    padding:25px;
+    padding:30px;
 
     border:1px solid #E2EBF2;
 
-    overflow-y:auto;
+    box-shadow:0 6px 20px rgba(120,140,160,0.08);
 }
 
 .study-record h2{
@@ -214,15 +220,17 @@ button:hover{
 
 .record-item{
 
-    background:white;
+    background:#F5F9FC;
 
-    padding:15px;
+    padding:16px;
 
     border-radius:14px;
 
-    margin-bottom:12px;
+    margin-bottom:14px;
 
     color:#60707D;
+
+    font-size:17px;
 
     box-shadow:0 2px 8px rgba(0,0,0,0.03);
 }

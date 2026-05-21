@@ -1,152 +1,138 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Silent Study Timer</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <style>
+<title>Silent Study Timer</title>
 
-    body{
-      margin:0;
-      padding:0;
-      height:100vh;
+<style>
 
-      display:flex;
-      justify-content:center;
-      align-items:center;
+body{
+    margin:0;
+    height:100vh;
 
-      background:#f4f7fb;
+    display:flex;
+    justify-content:center;
+    align-items:center;
 
-      font-family:Arial, sans-serif;
+    background:#f1f5f9;
 
-      transition:1s;
-    }
+    font-family:Arial, sans-serif;
+}
 
-    .container{
+.container{
 
-      width:430px;
+    width:420px;
 
-      background:white;
+    background:white;
 
-      padding:40px;
+    padding:40px;
 
-      border-radius:20px;
+    border-radius:20px;
 
-      box-shadow:0 0 20px rgba(0,0,0,0.1);
+    box-shadow:0 0 20px rgba(0,0,0,0.1);
 
-      text-align:center;
-    }
+    text-align:center;
+}
 
-    h1{
-      margin-bottom:10px;
-      color:#222;
-    }
+h1{
+    color:#222;
+}
 
-    p{
-      color:#666;
-      margin-bottom:25px;
-    }
+p{
+    color:#666;
+    margin-bottom:25px;
+}
 
-    .time-setting{
+#timer{
 
-      margin-bottom:25px;
+    font-size:80px;
 
-      font-size:18px;
-    }
+    font-weight:bold;
 
-    input{
+    margin:30px 0;
+}
 
-      width:90px;
+.time-setting{
 
-      padding:10px;
+    margin-bottom:20px;
+}
 
-      border-radius:10px;
+input{
 
-      border:1px solid #ccc;
+    width:80px;
 
-      text-align:center;
+    padding:10px;
 
-      font-size:18px;
-    }
+    border-radius:10px;
 
-    #timer{
+    border:1px solid #ccc;
 
-      font-size:80px;
+    text-align:center;
 
-      font-weight:bold;
+    font-size:18px;
+}
 
-      margin:30px 0;
+.button-group{
 
-      color:#222;
-    }
+    display:flex;
 
-    .button-group{
+    justify-content:center;
 
-      display:flex;
+    gap:10px;
 
-      justify-content:center;
+    margin-top:20px;
+}
 
-      gap:10px;
+button{
 
-      margin-top:20px;
-    }
+    padding:15px 25px;
 
-    button{
+    border:none;
 
-      padding:15px 25px;
+    border-radius:12px;
 
-      border:none;
+    font-size:18px;
 
-      border-radius:12px;
+    cursor:pointer;
+}
 
-      font-size:18px;
+#startBtn{
+    background:#4CAF50;
+    color:white;
+}
 
-      cursor:pointer;
+#pauseBtn{
+    background:#ff9800;
+    color:white;
+}
 
-      transition:0.3s;
-    }
+#resetBtn{
+    background:#f44336;
+    color:white;
+}
 
-    button:hover{
-      opacity:0.85;
-    }
+#message{
 
-    #startBtn{
-      background:#4CAF50;
-      color:white;
-    }
+    margin-top:25px;
 
-    #pauseBtn{
-      background:#ff9800;
-      color:white;
-    }
+    min-height:30px;
 
-    #resetBtn{
-      background:#f44336;
-      color:white;
-    }
+    font-size:20px;
+}
 
-    #message{
+.break{
+    background:#dfffe0;
+}
 
-      margin-top:25px;
+</style>
 
-      font-size:22px;
-
-      min-height:30px;
-
-      color:#444;
-    }
-
-    .break{
-      background:#dfffe0;
-    }
-
-  </style>
 </head>
 
 <body>
 
-  <div class="container">
+<div class="container">
 
     <h1>Silent Study Timer</h1>
 
@@ -154,13 +140,13 @@
 
     <div class="time-setting">
 
-      공부 시간 설정 (최대 50분)
+        공부 시간 설정 (최대 50분)
 
-      <br><br>
+        <br><br>
 
-      <input type="number" id="minutesInput" min="1" max="50" value="1">
+        <input type="number" id="minutesInput" min="1" max="50" value="1">
 
-      분
+        분
 
     </div>
 
@@ -168,71 +154,64 @@
 
     <div class="button-group">
 
-      <button id="startBtn">시작</button>
+        <button id="startBtn">시작</button>
 
-      <button id="pauseBtn">정지</button>
+        <button id="pauseBtn">정지</button>
 
-      <button id="resetBtn">초기화</button>
+        <button id="resetBtn">초기화</button>
 
     </div>
 
     <div id="message"></div>
 
-  </div>
+</div>
 
-  <audio id="alarm">
-    <source src="https://actions.google.com/sounds/v1/alarms/beep_short.ogg" type="audio/ogg">
-  </audio>
+<audio id="alarm">
+<source src="https://actions.google.com/sounds/v1/alarms/beep_short.ogg" type="audio/ogg">
+</audio>
 
-  <script>
+<script>
 
-    const timer = document.getElementById("timer");
+const timer = document.getElementById("timer");
 
-    const startBtn = document.getElementById("startBtn");
+const startBtn = document.getElementById("startBtn");
 
-    const pauseBtn = document.getElementById("pauseBtn");
+const pauseBtn = document.getElementById("pauseBtn");
 
-    const resetBtn = document.getElementById("resetBtn");
+const resetBtn = document.getElementById("resetBtn");
 
-    const message = document.getElementById("message");
+const message = document.getElementById("message");
 
-    const alarm = document.getElementById("alarm");
+const alarm = document.getElementById("alarm");
 
-    const minutesInput = document.getElementById("minutesInput");
+const minutesInput = document.getElementById("minutesInput");
 
-    let time = 60;
+let time = 60;
 
-    let running = false;
+let running = false;
 
-    let interval;
+let interval;
 
-    function updateTimer(){
+function updateTimer(){
 
-      let minutes = Math.floor(time / 60);
+    let minutes = Math.floor(time / 60);
 
-      let seconds = time % 60;
+    let seconds = time % 60;
 
-      minutes = String(minutes).padStart(2,"0");
+    minutes = String(minutes).padStart(2,"0");
 
-      seconds = String(seconds).padStart(2,"0");
+    seconds = String(seconds).padStart(2,"0");
 
-      timer.innerText = `${minutes}:${seconds}`;
-    }
+    timer.innerText = `${minutes}:${seconds}`;
+}
 
-    startBtn.addEventListener("click", ()=>{
+startBtn.addEventListener("click", ()=>{
 
-      if(running) return;
+    if(running) return;
 
-      if(time <= 0){
+    running = true;
 
-        let selectedMinutes = Number(minutesInput.value);
-
-        time = selectedMinutes * 60;
-      }
-
-      running = true;
-
-      interval = setInterval(()=>{
+    interval = setInterval(()=>{
 
         time--;
 
@@ -240,79 +219,67 @@
 
         if(time <= 0){
 
-          clearInterval(interval);
+            clearInterval(interval);
 
-          running = false;
+            running = false;
 
-          alarm.volume = 0.1;
+            document.body.classList.add("break");
 
-          alarm.play();
+            alarm.volume = 0.1;
 
-          document.body.classList.add("break");
+            alarm.play();
 
-          message.innerText = "눈을 쉬어주세요 😊";
+            message.innerText = "눈을 쉬어주세요 😊";
         }
 
-      },1000);
+    },1000);
+});
 
-    });
+pauseBtn.addEventListener("click", ()=>{
 
-    pauseBtn.addEventListener("click", ()=>{
+    clearInterval(interval);
 
-      clearInterval(interval);
+    running = false;
 
-      running = false;
+    message.innerText = "타이머 정지";
+});
 
-      message.innerText = "타이머가 정지되었습니다.";
-    });
+resetBtn.addEventListener("click", ()=>{
 
-    resetBtn.addEventListener("click", ()=>{
+    clearInterval(interval);
 
-      clearInterval(interval);
+    running = false;
 
-      running = false;
+    let selectedMinutes = Number(minutesInput.value);
 
-      let selectedMinutes = Number(minutesInput.value);
-
-      if(selectedMinutes > 50){
-
-        alert("최대 50분까지 설정 가능합니다.");
-
-        selectedMinutes = 50;
-
-        minutesInput.value = 50;
-      }
-
-      time = selectedMinutes * 60;
-
-      updateTimer();
-
-      document.body.classList.remove("break");
-
-      message.innerText = "";
-    });
-
-    minutesInput.addEventListener("change", ()=>{
-
-      let selectedMinutes = Number(minutesInput.value);
-
-      if(selectedMinutes > 50){
-
-        alert("최대 50분까지 설정 가능합니다.");
-
-        selectedMinutes = 50;
-
-        minutesInput.value = 50;
-      }
-
-      time = selectedMinutes * 60;
-
-      updateTimer();
-    });
+    time = selectedMinutes * 60;
 
     updateTimer();
 
-  </script>
+    message.innerText = "";
+
+    document.body.classList.remove("break");
+});
+
+minutesInput.addEventListener("change", ()=>{
+
+    let selectedMinutes = Number(minutesInput.value);
+
+    if(selectedMinutes > 50){
+
+        selectedMinutes = 50;
+
+        minutesInput.value = 50;
+    }
+
+    time = selectedMinutes * 60;
+
+    updateTimer();
+});
+
+updateTimer();
+
+</script>
 
 </body>
 </html>

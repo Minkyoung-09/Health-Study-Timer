@@ -11,22 +11,28 @@
 
 body{
     margin:0;
-    padding:0;
+    padding:40px;
 
-    height:100vh;
-
-    display:flex;
-    justify-content:center;
-    align-items:center;
+    min-height:100vh;
 
     background:#EEF4F8;
 
     font-family:Arial, sans-serif;
+
+    box-sizing:border-box;
 }
 
 .container{
 
-    width:500px;
+    width:1100px;
+
+    margin:auto;
+
+    display:flex;
+
+    gap:30px;
+
+    align-items:flex-start;
 
     background:#FDFEFE;
 
@@ -34,11 +40,14 @@ body{
 
     border-radius:25px;
 
-    text-align:center;
-
     box-shadow:0 8px 25px rgba(120,140,160,0.12);
 
     border:1px solid #E3ECF3;
+}
+
+.left-panel{
+
+    width:430px;
 }
 
 h1{
@@ -66,9 +75,9 @@ p{
     border-radius:18px;
 }
 
-select,input{
+input{
 
-    width:130px;
+    width:150px;
 
     padding:10px;
 
@@ -89,7 +98,7 @@ select,input{
 
 #timer{
 
-    font-size:85px;
+    font-size:90px;
 
     font-weight:bold;
 
@@ -103,14 +112,14 @@ select,input{
 
     padding:20px;
 
+    text-align:center;
+
     box-shadow:0 2px 10px rgba(0,0,0,0.04);
 }
 
 .button-group{
 
     display:flex;
-
-    justify-content:center;
 
     gap:12px;
 
@@ -181,31 +190,41 @@ button:hover{
 
 .study-record{
 
-    margin-top:30px;
+    flex:1;
+
+    min-height:600px;
 
     background:#F5F9FC;
 
-    border-radius:18px;
+    border-radius:20px;
 
-    padding:20px;
-
-    text-align:left;
+    padding:25px;
 
     border:1px solid #E2EBF2;
+
+    overflow-y:auto;
 }
 
-.study-record h3{
+.study-record h2{
 
     margin-top:0;
 
     color:#566B7A;
 }
 
-.study-record p{
+.record-item{
 
-    margin:10px 0;
+    background:white;
 
-    color:#6A7B88;
+    padding:15px;
+
+    border-radius:14px;
+
+    margin-bottom:12px;
+
+    color:#60707D;
+
+    box-shadow:0 2px 8px rgba(0,0,0,0.03);
 }
 
 .break{
@@ -220,69 +239,59 @@ button:hover{
 
 <div class="container">
 
-    <h1>Silent Study Timer</h1>
+    <div class="left-panel">
 
-    <p>조용한 환경을 위한 건강 중심 공부 타이머</p>
+        <h1>Silent Study Timer</h1>
 
-    <div class="time-setting">
+        <p>조용한 환경을 위한 건강 중심 공부 타이머</p>
 
-        과목 선택
+        <div class="time-setting">
 
-        <br><br>
+            과목 입력
 
-        <select id="subject">
+            <br><br>
 
-            <option value="수학">수학</option>
+            <input type="text"
+                   id="subject"
+                   placeholder="예: 수학">
 
-            <option value="영어">영어</option>
+            <br><br><br>
 
-            <option value="국어">국어</option>
+            공부 시간 설정 (최대 50분)
 
-            <option value="과학">과학</option>
+            <br><br>
 
-        </select>
+            <input type="number"
+                   id="minutesInput"
+                   min="1"
+                   max="50"
+                   value="1">
 
-        <br><br>
+            분
 
-        공부 시간 설정 (최대 50분)
+        </div>
 
-        <br><br>
+        <div id="timer">01:00</div>
 
-        <input type="number"
-               id="minutesInput"
-               min="1"
-               max="50"
-               value="1">
+        <div class="button-group">
 
-        분
+            <button id="startBtn">시작</button>
 
-    </div>
+            <button id="pauseBtn">정지</button>
 
-    <div id="timer">01:00</div>
+            <button id="resetBtn">초기화</button>
 
-    <div class="button-group">
+        </div>
 
-        <button id="startBtn">시작</button>
-
-        <button id="pauseBtn">정지</button>
-
-        <button id="resetBtn">초기화</button>
+        <div id="message"></div>
 
     </div>
-
-    <div id="message"></div>
 
     <div class="study-record">
 
-        <h3>오늘의 공부 기록</h3>
+        <h2>오늘의 공부 기록</h2>
 
-        <p id="mathRecord">수학 : 0분</p>
-
-        <p id="englishRecord">영어 : 0분</p>
-
-        <p id="koreanRecord">국어 : 0분</p>
-
-        <p id="scienceRecord">과학 : 0분</p>
+        <div id="recordList"></div>
 
     </div>
 
@@ -304,6 +313,8 @@ const message = document.getElementById("message");
 
 const subject = document.getElementById("subject");
 
+const recordList = document.getElementById("recordList");
+
 let time = 60;
 
 let breakTime = 600;
@@ -314,28 +325,8 @@ let running = false;
 
 let isBreak = false;
 
-let studyData = JSON.parse(localStorage.getItem("studyData")) || {
-
-    수학:0,
-    영어:0,
-    국어:0,
-    과학:0
-};
-
-function updateRecords(){
-
-    document.getElementById("mathRecord").innerText =
-    `수학 : ${studyData["수학"]}분`;
-
-    document.getElementById("englishRecord").innerText =
-    `영어 : ${studyData["영어"]}분`;
-
-    document.getElementById("koreanRecord").innerText =
-    `국어 : ${studyData["국어"]}분`;
-
-    document.getElementById("scienceRecord").innerText =
-    `과학 : ${studyData["과학"]}분`;
-}
+let studyData =
+JSON.parse(localStorage.getItem("studyData")) || {};
 
 function updateTimer(){
 
@@ -348,6 +339,23 @@ function updateTimer(){
     seconds = String(seconds).padStart(2,"0");
 
     timer.innerText = `${minutes}:${seconds}`;
+}
+
+function updateRecords(){
+
+    recordList.innerHTML = "";
+
+    for(let subjectName in studyData){
+
+        const div = document.createElement("div");
+
+        div.className = "record-item";
+
+        div.innerText =
+        `${subjectName} : ${studyData[subjectName]}분`;
+
+        recordList.appendChild(div);
+    }
 }
 
 minutesInput.addEventListener("change", ()=>{
@@ -393,11 +401,22 @@ startBtn.addEventListener("click", ()=>{
 
             if(!isBreak){
 
-                let selectedSubject = subject.value;
+                let subjectName = subject.value.trim();
 
-                let studyMinutes = Number(minutesInput.value);
+                if(subjectName === ""){
 
-                studyData[selectedSubject] += studyMinutes;
+                    subjectName = "기타";
+                }
+
+                let studyMinutes =
+                Number(minutesInput.value);
+
+                if(!studyData[subjectName]){
+
+                    studyData[subjectName] = 0;
+                }
+
+                studyData[subjectName] += studyMinutes;
 
                 localStorage.setItem(
                     "studyData",
@@ -408,7 +427,8 @@ startBtn.addEventListener("click", ()=>{
 
                 document.body.classList.add("break");
 
-                message.innerText = "눈을 쉬어주세요 😊";
+                message.innerText =
+                "눈을 쉬어주세요 😊";
 
                 isBreak = true;
 
@@ -422,11 +442,13 @@ startBtn.addEventListener("click", ()=>{
 
                 document.body.classList.remove("break");
 
-                message.innerText = "다시 공부를 시작하세요 📚";
+                message.innerText =
+                "다시 공부를 시작하세요 📚";
 
                 isBreak = false;
 
-                let selected = Number(minutesInput.value);
+                let selected =
+                Number(minutesInput.value);
 
                 time = selected * 60;
 
@@ -454,7 +476,8 @@ resetBtn.addEventListener("click", ()=>{
 
     isBreak = false;
 
-    let selected = Number(minutesInput.value);
+    let selected =
+    Number(minutesInput.value);
 
     time = selected * 60;
 

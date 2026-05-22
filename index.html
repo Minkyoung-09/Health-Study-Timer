@@ -1,30 +1,615 @@
-<!-- 오른쪽 아래 카메라 + 사진 영역 -->
+<!DOCTYPE html>
+<html lang="ko">
 
-<div class="camera-section">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- 목표 사진 -->
-    <div class="right-image-box">
+<title>Silent Study Timer</title>
 
-        <h3>공부 목표 사진</h3>
+<style>
 
-        <input type="file"
-               id="imageUpload"
-               accept="image/*">
+body{
+    margin:0;
+    padding:40px;
+    min-height:100vh;
+    background:#EEF4F8;
+    font-family:Arial, sans-serif;
+    box-sizing:border-box;
+}
 
-        <img id="previewImage">
+.container{
+    width:1200px;
+    margin:auto;
+    display:flex;
+    gap:30px;
+    align-items:flex-start;
+    background:#FDFEFE;
+    padding:40px;
+    border-radius:25px;
+    box-shadow:0 8px 25px rgba(120,140,160,0.12);
+    border:1px solid #E3ECF3;
+}
+
+.left-panel{
+    width:430px;
+}
+
+h1{
+    color:#526777;
+    margin-bottom:10px;
+}
+
+p{
+    color:#7B8C99;
+    margin-bottom:25px;
+}
+
+.time-setting{
+    margin-bottom:20px;
+    color:#6C7C88;
+    font-size:18px;
+    background:#F5F9FC;
+    padding:20px;
+    border-radius:18px;
+}
+
+input{
+    width:150px;
+    padding:10px;
+    border-radius:12px;
+    border:1px solid #D6E2EC;
+    background:#FAFCFE;
+    text-align:center;
+    font-size:16px;
+    color:#5A6C79;
+    outline:none;
+}
+
+#timer{
+    font-size:90px;
+    font-weight:bold;
+    color:#435866;
+    margin:30px 0;
+    background:white;
+    border-radius:20px;
+    padding:20px;
+    text-align:center;
+    box-shadow:0 2px 10px rgba(0,0,0,0.04);
+}
+
+.button-group{
+    display:flex;
+    gap:12px;
+    margin-top:20px;
+}
+
+button{
+    border:none;
+    padding:15px 25px;
+    border-radius:14px;
+    font-size:18px;
+    font-weight:600;
+    cursor:pointer;
+    transition:0.2s;
+}
+
+button:hover{
+    transform:scale(1.03);
+    opacity:0.92;
+}
+
+#startBtn{
+    background:#D7EAF6;
+    color:#4F6573;
+}
+
+#pauseBtn{
+    background:#E1EEF5;
+    color:#5A6F7D;
+}
+
+#resetBtn{
+    background:#EDF3F8;
+    color:#647887;
+}
+
+#message{
+    margin-top:25px;
+    min-height:30px;
+    font-size:20px;
+    color:#6F7F8B;
+    background:#F6FAFD;
+    padding:12px;
+    border-radius:14px;
+}
+
+/* 오른쪽 */
+
+.study-record{
+    flex:1;
+    height:700px;
+    background:#F5F9FC;
+    border-radius:20px;
+    padding:25px;
+    border:1px solid #E2EBF2;
+    position:relative;
+    overflow:hidden;
+}
+
+.study-record h2{
+    margin-top:0;
+    color:#566B7A;
+}
+
+.add-subject{
+    margin-top:20px;
+    margin-bottom:20px;
+}
+
+.add-subject input{
+    width:250px;
+    padding:12px;
+    border-radius:12px;
+    border:1px solid #D6E2EC;
+    background:white;
+    font-size:16px;
+    color:#5A6C79;
+    text-align:left;
+}
+
+.record-item{
+    background:white;
+    padding:15px;
+    border-radius:14px;
+    margin-bottom:12px;
+    color:#60707D;
+    font-size:18px;
+    box-shadow:0 2px 8px rgba(0,0,0,0.03);
+}
+
+/* 사진 */
+
+.right-image-box{
+    position:absolute;
+    bottom:20px;
+    right:20px;
+    width:160px;
+    background:white;
+    padding:10px;
+    border-radius:16px;
+    box-shadow:0 2px 8px rgba(0,0,0,0.05);
+}
+
+.right-image-box h3{
+    margin-top:0;
+    margin-bottom:10px;
+    font-size:14px;
+    color:#5D7382;
+}
+
+#imageUpload{
+    width:100%;
+    font-size:11px;
+}
+
+#previewImage{
+    width:100%;
+    margin-top:10px;
+    border-radius:10px;
+    display:none;
+}
+
+/* 카메라 */
+
+.camera-box{
+    position:absolute;
+    bottom:20px;
+    right:210px;
+    width:220px;
+    background:white;
+    padding:10px;
+    border-radius:16px;
+    box-shadow:0 2px 8px rgba(0,0,0,0.05);
+}
+
+.camera-box h3{
+    margin-top:0;
+    margin-bottom:10px;
+    font-size:14px;
+    color:#5D7382;
+}
+
+#camera{
+    width:100%;
+    height:170px;
+    object-fit:cover;
+    border-radius:12px;
+    background:black;
+}
+
+.break{
+    background:#EAF4FB;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<!-- 음악 -->
+<audio id="alarmSound" preload="auto">
+    <source src="./alarm.mp3" type="audio/mp3">
+</audio>
+
+<div class="container">
+
+    <!-- 왼쪽 -->
+
+    <div class="left-panel">
+
+        <h1>Silent Study Timer</h1>
+
+        <p>조용한 환경을 위한 건강 중심 공부 타이머</p>
+
+        <div class="time-setting">
+
+            공부 시간 설정 (최대 50분)
+
+            <br><br>
+
+            <input type="number"
+                   id="minutesInput"
+                   min="1"
+                   max="50"
+                   value="1">
+
+            분
+
+        </div>
+
+        <div id="timer">01:00</div>
+
+        <div class="button-group">
+
+            <button id="startBtn">시작</button>
+
+            <button id="pauseBtn">정지</button>
+
+            <button id="resetBtn">초기화</button>
+
+        </div>
+
+        <div id="message"></div>
 
     </div>
 
-    <!-- 실시간 카메라 -->
-    <div class="camera-box">
+    <!-- 오른쪽 -->
 
-        <h3>실시간 카메라</h3>
+    <div class="study-record">
 
-        <video id="camera"
-               autoplay
-               playsinline>
-        </video>
+        <h2>오늘의 공부 기록</h2>
+
+        <div class="add-subject">
+
+            <input type="text"
+                   id="subject"
+                   placeholder="과목 입력">
+
+        </div>
+
+        <div id="recordList"></div>
+
+        <!-- 카메라 -->
+
+        <div class="camera-box">
+
+            <h3>실시간 카메라</h3>
+
+            <video id="camera"
+                   autoplay
+                   playsinline
+                   muted>
+            </video>
+
+        </div>
+
+        <!-- 사진 -->
+
+        <div class="right-image-box">
+
+            <h3>공부 목표 사진</h3>
+
+            <input type="file"
+                   id="imageUpload"
+                   accept="image/*">
+
+            <img id="previewImage">
+
+        </div>
 
     </div>
 
 </div>
+
+<script>
+
+const timer = document.getElementById("timer");
+const startBtn = document.getElementById("startBtn");
+const pauseBtn = document.getElementById("pauseBtn");
+const resetBtn = document.getElementById("resetBtn");
+const minutesInput = document.getElementById("minutesInput");
+const message = document.getElementById("message");
+const subject = document.getElementById("subject");
+const recordList = document.getElementById("recordList");
+
+const alarmSound =
+document.getElementById("alarmSound");
+
+const imageUpload =
+document.getElementById("imageUpload");
+
+const previewImage =
+document.getElementById("previewImage");
+
+const camera =
+document.getElementById("camera");
+
+let time = 60;
+let breakTime = 600;
+
+let interval;
+let running = false;
+let isBreak = false;
+
+/* 공부 기록 */
+
+let studyData =
+JSON.parse(localStorage.getItem("studyData")) || {};
+
+/* 저장된 이미지 */
+
+const savedImage =
+localStorage.getItem("studyImage");
+
+if(savedImage){
+
+    previewImage.src = savedImage;
+
+    previewImage.style.display = "block";
+}
+
+/* 이미지 업로드 */
+
+imageUpload.addEventListener("change",(event)=>{
+
+    const file =
+    event.target.files[0];
+
+    if(file){
+
+        const reader =
+        new FileReader();
+
+        reader.onload = function(e){
+
+            previewImage.src =
+            e.target.result;
+
+            previewImage.style.display =
+            "block";
+
+            localStorage.setItem(
+                "studyImage",
+                e.target.result
+            );
+        };
+
+        reader.readAsDataURL(file);
+    }
+});
+
+/* 카메라 실행 */
+
+async function startCamera(){
+
+    try{
+
+        const stream =
+        await navigator.mediaDevices.getUserMedia({
+
+            video:true,
+            audio:false
+
+        });
+
+        camera.srcObject = stream;
+
+    }catch(error){
+
+        console.log("카메라 오류:", error);
+
+        alert("카메라 권한을 허용해주세요.");
+    }
+}
+
+startCamera();
+
+function updateTimer(){
+
+    let minutes = Math.floor(time / 60);
+    let seconds = time % 60;
+
+    minutes = String(minutes).padStart(2,"0");
+    seconds = String(seconds).padStart(2,"0");
+
+    timer.innerText = `${minutes}:${seconds}`;
+}
+
+function updateRecords(){
+
+    recordList.innerHTML = "";
+
+    for(let subjectName in studyData){
+
+        const div = document.createElement("div");
+
+        div.className = "record-item";
+
+        div.innerText =
+        `${subjectName} : ${studyData[subjectName]}분`;
+
+        recordList.appendChild(div);
+    }
+}
+
+minutesInput.addEventListener("change", ()=>{
+
+    let selected = Number(minutesInput.value);
+
+    if(selected > 50){
+        selected = 50;
+        minutesInput.value = 50;
+    }
+
+    if(selected < 1){
+        selected = 1;
+        minutesInput.value = 1;
+    }
+
+    time = selected * 60;
+
+    updateTimer();
+});
+
+startBtn.addEventListener("click", ()=>{
+
+    if(running) return;
+
+    running = true;
+
+    interval = setInterval(()=>{
+
+        time--;
+
+        updateTimer();
+
+        if(time <= 0){
+
+            clearInterval(interval);
+
+            running = false;
+
+            if(!isBreak){
+
+                let subjectName =
+                subject.value.trim();
+
+                if(subjectName === ""){
+                    subjectName = "기타";
+                }
+
+                let studyMinutes =
+                Number(minutesInput.value);
+
+                if(!studyData[subjectName]){
+                    studyData[subjectName] = 0;
+                }
+
+                studyData[subjectName] += studyMinutes;
+
+                localStorage.setItem(
+                    "studyData",
+                    JSON.stringify(studyData)
+                );
+
+                updateRecords();
+
+                /* 알림 */
+
+                alarmSound.pause();
+
+                alarmSound.currentTime = 0;
+
+                alarmSound.volume = 0.1;
+
+                setTimeout(() => {
+
+                    alarmSound.play();
+
+                }, 100);
+
+                /* 휴식 */
+
+                document.body.classList.add("break");
+
+                message.innerText =
+                "눈을 쉬어주세요 😊";
+
+                isBreak = true;
+
+                time = breakTime;
+
+                updateTimer();
+
+                startBtn.click();
+
+            }else{
+
+                document.body.classList.remove("break");
+
+                message.innerText =
+                "다시 공부를 시작하세요 📚";
+
+                isBreak = false;
+
+                let selected =
+                Number(minutesInput.value);
+
+                time = selected * 60;
+
+                updateTimer();
+            }
+        }
+
+    },1000);
+});
+
+pauseBtn.addEventListener("click", ()=>{
+
+    clearInterval(interval);
+
+    running = false;
+
+    message.innerText = "타이머 정지";
+});
+
+resetBtn.addEventListener("click", ()=>{
+
+    clearInterval(interval);
+
+    running = false;
+
+    isBreak = false;
+
+    let selected =
+    Number(minutesInput.value);
+
+    time = selected * 60;
+
+    updateTimer();
+
+    message.innerText = "";
+
+    document.body.classList.remove("break");
+});
+
+updateTimer();
+updateRecords();
+
+</script>
+
+</body>
+
+</html>

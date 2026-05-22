@@ -216,8 +216,9 @@ button:hover{
 
 <body>
 
+<!-- 알람 음악 -->
 <audio id="alarmSound" preload="auto">
-    <source src="./alarm.mp3" type="audio/mp3">
+    <source src="./Stop The Time (2).mp3" type="audio/mp3">
 </audio>
 
 <div class="container">
@@ -537,6 +538,13 @@ startBtn.addEventListener("click", ()=>{
 
             running = false;
 
+            // 노래 재생
+            alarmSound.pause();
+            alarmSound.currentTime = 0;
+            alarmSound.volume = 1;
+
+            alarmSound.play();
+
             if(!isBreak){
 
                 let subjectName =
@@ -563,8 +571,6 @@ startBtn.addEventListener("click", ()=>{
                 );
 
                 updateRecords();
-
-                alarmSound.play();
 
                 message.innerText =
                 "눈을 쉬어주세요 😊";
@@ -619,6 +625,9 @@ resetBtn.addEventListener("click", ()=>{
     updateTimer();
 
     message.innerText = "";
+
+    alarmSound.pause();
+    alarmSound.currentTime = 0;
 });
 
 updateTimer();

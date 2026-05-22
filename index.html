@@ -124,7 +124,7 @@ button:hover{
     margin-bottom:12px;
 }
 
-/* 🔥 과목 입력창 */
+/* 과목 입력창 */
 
 #subjectInput{
     width:250px;
@@ -199,7 +199,7 @@ button:hover{
 
         <div class="time-setting">
 
-            공부 시간 설정
+            공부 시간 설정 (최대 50분)
 
             <br><br>
 
@@ -239,7 +239,7 @@ button:hover{
 
         <h2>오늘의 공부 기록</h2>
 
-        <!-- 🔥 입력창 다시 추가 -->
+        <!-- 🔥 입력창 -->
 
         <input type="text"
                id="subjectInput"
@@ -332,6 +332,29 @@ let isBreak = false;
 const breakTime = 10 * 60;
 
 let stream = null;
+
+/* 🔥 최대 50분 제한 */
+
+minutesInput.addEventListener("input", ()=>{
+
+    if(minutesInput.value > 50){
+
+        minutesInput.value = 50;
+    }
+
+    if(minutesInput.value < 1){
+
+        minutesInput.value = 1;
+    }
+
+    if(!running && !isBreak){
+
+        time =
+        Number(minutesInput.value) * 60;
+
+        updateTimer();
+    }
+});
 
 /* 타이머 표시 */
 

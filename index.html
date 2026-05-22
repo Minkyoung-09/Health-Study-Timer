@@ -84,42 +84,16 @@ input{
 
 button{
     border:none;
-    padding:15px 25px;
+    padding:15px 22px;
     border-radius:14px;
     font-size:18px;
     cursor:pointer;
     transition:0.2s;
+    background:#D7EAF6;
 }
 
 button:hover{
     transform:scale(1.03);
-}
-
-#startBtn{
-    background:#D7EAF6;
-}
-
-#pauseBtn{
-    background:#E1EEF5;
-}
-
-#resetBtn{
-    background:#EDF3F8;
-}
-
-#cameraToggleBtn{
-
-    background:#D7EAF6;
-
-    min-width:150px;
-}
-
-#message{
-    margin-top:20px;
-    padding:12px;
-    border-radius:12px;
-    background:#F6FAFD;
-    color:#6F7F8B;
 }
 
 /* 오른쪽 */
@@ -166,17 +140,15 @@ button:hover{
 
     left:20px;
 
-    width:470px;
+    width:590px;
 
-    height:250px;
+    height:280px;
 
-    background:white;
+    background:black;
 
-    border-radius:18px;
+    border-radius:20px;
 
     overflow:hidden;
-
-    box-shadow:0 2px 10px rgba(0,0,0,0.05);
 }
 
 #camera{
@@ -188,8 +160,6 @@ button:hover{
     object-fit:cover;
 
     display:block;
-
-    background:black;
 
     transform:scaleX(-1);
 }
@@ -204,7 +174,7 @@ button:hover{
 
     right:20px;
 
-    width:160px;
+    width:170px;
 
     background:white;
 
@@ -231,6 +201,14 @@ button:hover{
     margin-top:10px;
     border-radius:10px;
     display:none;
+}
+
+#message{
+    margin-top:20px;
+    padding:12px;
+    border-radius:12px;
+    background:#F6FAFD;
+    color:#6F7F8B;
 }
 
 </style>
@@ -278,7 +256,9 @@ button:hover{
 
             <button id="resetBtn">초기화</button>
 
-            <button id="cameraToggleBtn">카메라 끄기</button>
+            <button id="cameraToggleBtn">
+                카메라 끄기
+            </button>
 
         </div>
 
@@ -342,10 +322,17 @@ const resetBtn = document.getElementById("resetBtn");
 const cameraToggleBtn =
 document.getElementById("cameraToggleBtn");
 
-const minutesInput = document.getElementById("minutesInput");
-const message = document.getElementById("message");
-const subject = document.getElementById("subject");
-const recordList = document.getElementById("recordList");
+const minutesInput =
+document.getElementById("minutesInput");
+
+const message =
+document.getElementById("message");
+
+const subject =
+document.getElementById("subject");
+
+const recordList =
+document.getElementById("recordList");
 
 const alarmSound =
 document.getElementById("alarmSound");
@@ -374,6 +361,8 @@ let isBreak = false;
 let studyData =
 JSON.parse(localStorage.getItem("studyData")) || {};
 
+updateRecords();
+
 /* 저장된 이미지 */
 
 const savedImage =
@@ -390,21 +379,17 @@ if(savedImage){
 
 imageUpload.addEventListener("change",(event)=>{
 
-    const file =
-    event.target.files[0];
+    const file = event.target.files[0];
 
     if(file){
 
-        const reader =
-        new FileReader();
+        const reader = new FileReader();
 
         reader.onload = function(e){
 
-            previewImage.src =
-            e.target.result;
+            previewImage.src = e.target.result;
 
-            previewImage.style.display =
-            "block";
+            previewImage.style.display = "block";
 
             localStorage.setItem(
                 "studyImage",
@@ -434,13 +419,9 @@ async function startCamera(){
 
         camera.srcObject = stream;
 
-        camera.style.transform = "scaleX(-1)";
-
     }catch(error){
 
-        console.log(error);
-
-        alert("카메라 권한을 허용해주세요.");
+        alert("카메라 권한 허용 필요");
     }
 }
 
@@ -492,7 +473,8 @@ function updateTimer(){
     minutes = String(minutes).padStart(2,"0");
     seconds = String(seconds).padStart(2,"0");
 
-    timer.innerText = `${minutes}:${seconds}`;
+    timer.innerText =
+    `${minutes}:${seconds}`;
 }
 
 function updateRecords(){
@@ -501,7 +483,8 @@ function updateRecords(){
 
     for(let subjectName in studyData){
 
-        const div = document.createElement("div");
+        const div =
+        document.createElement("div");
 
         div.className = "record-item";
 
@@ -514,15 +497,20 @@ function updateRecords(){
 
 minutesInput.addEventListener("change", ()=>{
 
-    let selected = Number(minutesInput.value);
+    let selected =
+    Number(minutesInput.value);
 
     if(selected > 50){
+
         selected = 50;
+
         minutesInput.value = 50;
     }
 
     if(selected < 1){
+
         selected = 1;
+
         minutesInput.value = 1;
     }
 
@@ -555,6 +543,7 @@ startBtn.addEventListener("click", ()=>{
                 subject.value.trim();
 
                 if(subjectName === ""){
+
                     subjectName = "기타";
                 }
 
@@ -562,6 +551,7 @@ startBtn.addEventListener("click", ()=>{
                 Number(minutesInput.value);
 
                 if(!studyData[subjectName]){
+
                     studyData[subjectName] = 0;
                 }
 
@@ -574,15 +564,7 @@ startBtn.addEventListener("click", ()=>{
 
                 updateRecords();
 
-                alarmSound.pause();
-                alarmSound.currentTime = 0;
-                alarmSound.volume = 0.1;
-
-                setTimeout(() => {
-
-                    alarmSound.play();
-
-                }, 100);
+                alarmSound.play();
 
                 message.innerText =
                 "눈을 쉬어주세요 😊";
@@ -593,12 +575,10 @@ startBtn.addEventListener("click", ()=>{
 
                 updateTimer();
 
-                startBtn.click();
-
             }else{
 
                 message.innerText =
-                "다시 공부를 시작하세요 📚";
+                "다시 공부 시작 📚";
 
                 isBreak = false;
 
@@ -642,7 +622,6 @@ resetBtn.addEventListener("click", ()=>{
 });
 
 updateTimer();
-updateRecords();
 
 </script>
 

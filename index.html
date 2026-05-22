@@ -124,33 +124,6 @@ button:hover{
     border-radius:14px;
 }
 
-/* 이미지 업로드 */
-
-.image-box{
-    margin-top:25px;
-    background:white;
-    padding:15px;
-    border-radius:18px;
-    box-shadow:0 2px 8px rgba(0,0,0,0.03);
-}
-
-.image-box h3{
-    margin-top:0;
-    color:#5D7382;
-}
-
-#imageUpload{
-    width:100%;
-    background:#F5F9FC;
-}
-
-#previewImage{
-    width:100%;
-    margin-top:15px;
-    border-radius:15px;
-    display:none;
-}
-
 /* 오른쪽 */
 
 .study-record{
@@ -160,6 +133,7 @@ button:hover{
     border-radius:20px;
     padding:25px;
     border:1px solid #E2EBF2;
+    position:relative;
 }
 
 .study-record h2{
@@ -191,6 +165,44 @@ button:hover{
     color:#60707D;
     font-size:18px;
     box-shadow:0 2px 8px rgba(0,0,0,0.03);
+}
+
+/* 작은 사진 업로드 박스 */
+
+.right-image-box{
+    position:absolute;
+
+    bottom:25px;
+
+    right:25px;
+
+    width:180px;
+
+    background:white;
+
+    padding:12px;
+
+    border-radius:16px;
+
+    box-shadow:0 2px 8px rgba(0,0,0,0.05);
+}
+
+.right-image-box h3{
+    margin-top:0;
+    font-size:15px;
+    color:#5D7382;
+}
+
+#imageUpload{
+    width:100%;
+    font-size:12px;
+}
+
+#previewImage{
+    width:100%;
+    margin-top:10px;
+    border-radius:10px;
+    display:none;
 }
 
 .break{
@@ -247,20 +259,6 @@ button:hover{
 
         <div id="message"></div>
 
-        <!-- 이미지 업로드 -->
-
-        <div class="image-box">
-
-            <h3>공부 목표 이미지</h3>
-
-            <input type="file"
-                   id="imageUpload"
-                   accept="image/*">
-
-            <img id="previewImage">
-
-        </div>
-
     </div>
 
     <!-- 오른쪽 -->
@@ -277,6 +275,20 @@ button:hover{
         </div>
 
         <div id="recordList"></div>
+
+        <!-- 오른쪽 아래 작은 사진 업로드 -->
+
+        <div class="right-image-box">
+
+            <h3>공부 목표 사진</h3>
+
+            <input type="file"
+                   id="imageUpload"
+                   accept="image/*">
+
+            <img id="previewImage">
+
+        </div>
 
     </div>
 
@@ -296,8 +308,6 @@ const recordList = document.getElementById("recordList");
 const alarmSound =
 document.getElementById("alarmSound");
 
-/* 이미지 */
-
 const imageUpload =
 document.getElementById("imageUpload");
 
@@ -316,7 +326,7 @@ let isBreak = false;
 let studyData =
 JSON.parse(localStorage.getItem("studyData")) || {};
 
-/* 저장된 이미지 불러오기 */
+/* 저장된 이미지 */
 
 const savedImage =
 localStorage.getItem("studyImage");

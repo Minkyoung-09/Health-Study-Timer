@@ -179,7 +179,6 @@ button:hover{
 <body>
 
 <!-- 알림 음악 -->
-
 <audio id="alarmSound" preload="auto">
     <source src="./alarm.mp3" type="audio/mp3">
 </audio>
@@ -265,6 +264,8 @@ let interval;
 let running = false;
 let isBreak = false;
 
+/* 공부 기록 저장 */
+
 let studyData =
 JSON.parse(localStorage.getItem("studyData")) || {};
 
@@ -335,12 +336,16 @@ startBtn.addEventListener("click", ()=>{
 
             if(!isBreak){
 
+                /* 과목명 */
+
                 let subjectName =
                 subject.value.trim();
 
                 if(subjectName === ""){
                     subjectName = "기타";
                 }
+
+                /* 공부 시간 저장 */
 
                 let studyMinutes =
                 Number(minutesInput.value);
@@ -358,21 +363,15 @@ startBtn.addEventListener("click", ()=>{
 
                 updateRecords();
 
-                /* 소리 재생 */
+                /* 알림 음악 재생 */
 
                 alarmSound.volume = 0.1;
 
                 alarmSound.currentTime = 0;
 
-                const playPromise =
-                alarmSound.play();
-
-                if(playPromise !== undefined){
-
-                    playPromise.catch(error => {
-                        console.log(error);
-                    });
-                }
+                alarmSound.play().catch(error => {
+                    console.log(error);
+                });
 
                 /* 휴식 시작 */
 

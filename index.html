@@ -124,6 +124,19 @@ button:hover{
     margin-bottom:12px;
 }
 
+/* 과목 입력 */
+
+#subjectInput{
+    width:250px;
+    padding:12px;
+    border-radius:12px;
+    border:1px solid #D6E2EC;
+    background:white;
+    text-align:left;
+    font-size:16px;
+    margin-bottom:20px;
+}
+
 /* 카메라 */
 
 .camera-box{
@@ -168,8 +181,7 @@ button:hover{
 
 <body>
 
-<!-- 🔥 여기 중요 -->
-<!-- mp3 파일 이름이 정확히 같아야 함 -->
+<!-- 🔥 음원 절대 안 건드림 -->
 
 <audio id="alarmSound">
     <source src="Stop The Time .mp3" type="audio/mpeg">
@@ -226,6 +238,12 @@ button:hover{
     <div class="study-record">
 
         <h2>오늘의 공부 기록</h2>
+
+        <!-- 🔥 과목 입력창 다시 추가 -->
+
+        <input type="text"
+               id="subjectInput"
+               placeholder="과목 입력">
 
         <div id="recordList"></div>
 
@@ -293,6 +311,12 @@ document.getElementById("imageUpload");
 
 const previewImage =
 document.getElementById("previewImage");
+
+const subjectInput =
+document.getElementById("subjectInput");
+
+const recordList =
+document.getElementById("recordList");
 
 /* 변수 */
 
@@ -366,8 +390,6 @@ function playAlarm(){
 
 startBtn.addEventListener("click", ()=>{
 
-    /* 🔥 브라우저 오디오 활성화 */
-
     alarmSound.play()
     .then(()=>{
 
@@ -397,6 +419,25 @@ startBtn.addEventListener("click", ()=>{
 
             playAlarm();
 
+            /* 🔥 공부 기록 추가 */
+
+            if(!isBreak){
+
+                const subject =
+                subjectInput.value || "기본";
+
+                const record =
+                document.createElement("div");
+
+                record.className =
+                "record-item";
+
+                record.innerText =
+                `${subject} 공부 완료`;
+
+                recordList.appendChild(record);
+            }
+
             /* 공부 끝 → 휴식 */
 
             if(!isBreak){
@@ -409,8 +450,6 @@ startBtn.addEventListener("click", ()=>{
                 time = breakTime;
 
                 updateTimer();
-
-                /* 🔥 자동 시작 */
 
                 setTimeout(()=>{
 

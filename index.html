@@ -124,7 +124,7 @@ button:hover{
     margin-bottom:12px;
 }
 
-/* 과목 입력창 */
+/* 입력창 */
 
 #subjectInput{
     width:250px;
@@ -181,8 +181,6 @@ button:hover{
 
 <body>
 
-<!-- 🔥 음원 -->
-
 <audio id="alarmSound">
     <source src="Stop The Time .mp3" type="audio/mpeg">
 </audio>
@@ -238,8 +236,6 @@ button:hover{
     <div class="study-record">
 
         <h2>오늘의 공부 기록</h2>
-
-        <!-- 입력창 -->
 
         <input type="text"
                id="subjectInput"
@@ -366,8 +362,7 @@ function playAlarm(){
 
     if(playPromise !== undefined){
 
-        playPromise
-        .catch(error=>{
+        playPromise.catch(error=>{
 
             console.log(
                 "노래 재생 실패",
@@ -392,8 +387,6 @@ startBtn.addEventListener("click", ()=>{
 
     if(running) return;
 
-    /* 입력 시간 반영 */
-
     if(!isBreak){
 
         time =
@@ -416,15 +409,20 @@ startBtn.addEventListener("click", ()=>{
 
             playAlarm();
 
-            /* 🔥 공부 시간 기록 */
+            /* 🔥 시간 기록 */
 
             if(!isBreak){
 
                 const subject =
                 subjectInput.value || "기본";
 
-                const studyMinutes =
-                Number(minutesInput.value);
+                const now =
+                new Date();
+
+                const currentTime =
+                now.getHours() + ":" +
+                String(now.getMinutes())
+                .padStart(2,"0");
 
                 const record =
                 document.createElement("div");
@@ -433,7 +431,7 @@ startBtn.addEventListener("click", ()=>{
                 "record-item";
 
                 record.innerText =
-                `${subject} - ${studyMinutes}분 공부`;
+                `${subject} - ${currentTime}`;
 
                 recordList.appendChild(record);
             }
@@ -458,8 +456,6 @@ startBtn.addEventListener("click", ()=>{
                 },1000);
 
             }else{
-
-                /* 휴식 → 공부 */
 
                 isBreak = false;
 

@@ -124,16 +124,24 @@ button:hover{
     border-radius:14px;
 }
 
-/* 오른쪽 */
+/* 오른쪽 공부 기록 */
 
 .study-record{
     flex:1;
-    min-height:700px;
+
+    height:700px;
+
     background:#F5F9FC;
+
     border-radius:20px;
+
     padding:25px;
+
     border:1px solid #E2EBF2;
+
     position:relative;
+
+    overflow:hidden;
 }
 
 .study-record h2{
@@ -167,35 +175,38 @@ button:hover{
     box-shadow:0 2px 8px rgba(0,0,0,0.03);
 }
 
-/* 작은 사진 업로드 박스 */
+/* 진짜 오른쪽 아래 */
 
 .right-image-box{
     position:absolute;
 
-    bottom:25px;
+    bottom:20px;
 
-    right:25px;
+    right:20px;
 
-    width:180px;
+    width:160px;
 
     background:white;
 
-    padding:12px;
+    padding:10px;
 
     border-radius:16px;
 
     box-shadow:0 2px 8px rgba(0,0,0,0.05);
+
+    z-index:10;
 }
 
 .right-image-box h3{
     margin-top:0;
-    font-size:15px;
+    margin-bottom:10px;
+    font-size:14px;
     color:#5D7382;
 }
 
 #imageUpload{
     width:100%;
-    font-size:12px;
+    font-size:11px;
 }
 
 #previewImage{
@@ -223,6 +234,7 @@ button:hover{
 <div class="container">
 
     <!-- 왼쪽 -->
+
     <div class="left-panel">
 
         <h1>Silent Study Timer</h1>
@@ -262,6 +274,7 @@ button:hover{
     </div>
 
     <!-- 오른쪽 -->
+
     <div class="study-record">
 
         <h2>오늘의 공부 기록</h2>
@@ -276,7 +289,7 @@ button:hover{
 
         <div id="recordList"></div>
 
-        <!-- 오른쪽 아래 작은 사진 업로드 -->
+        <!-- 오른쪽 아래 사진 -->
 
         <div class="right-image-box">
 
@@ -321,7 +334,7 @@ let interval;
 let running = false;
 let isBreak = false;
 
-/* 공부 기록 저장 */
+/* 공부 기록 */
 
 let studyData =
 JSON.parse(localStorage.getItem("studyData")) || {};
@@ -458,7 +471,7 @@ startBtn.addEventListener("click", ()=>{
 
                 updateRecords();
 
-                /* 알림 음악 */
+                /* 소리 */
 
                 alarmSound.pause();
 
@@ -472,7 +485,7 @@ startBtn.addEventListener("click", ()=>{
 
                 }, 100);
 
-                /* 휴식 시작 */
+                /* 휴식 */
 
                 document.body.classList.add("break");
 

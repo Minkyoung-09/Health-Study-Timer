@@ -80,6 +80,7 @@ input{
 .button-group{
     display:flex;
     gap:12px;
+    flex-wrap:wrap;
 }
 
 button{
@@ -218,7 +219,7 @@ button:hover{
 
 <!-- 알람 음악 -->
 <audio id="alarmSound" preload="auto">
-    <source src="./Stop The Time (2).mp3" type="audio/mp3">
+    <source src="./Stop The Time (2).mp3" type="audio/mpeg">
 </audio>
 
 <div class="container">
@@ -350,14 +351,21 @@ document.getElementById("camera");
 let cameraStream = null;
 let cameraOn = true;
 
-let time = 60;
-let breakTime = 600;
-
-let interval;
+let interval = null;
 let running = false;
+
 let isBreak = false;
 
-/* 공부 기록 */
+/* 공부 시간 */
+let studyMinutes = 1;
+
+/* 쉬는 시간 10분 */
+const breakTime = 10 * 60;
+
+/* 현재 시간 */
+let time = studyMinutes * 60;
+
+/* 저장된 기록 */
 
 let studyData =
 JSON.parse(localStorage.getItem("studyData")) || {};
@@ -464,7 +472,7 @@ cameraToggleBtn.addEventListener("click", ()=>{
 
 startCamera();
 
-/* 타이머 */
+/* 타이머 표시 */
 
 function updateTimer(){
 
@@ -477,6 +485,8 @@ function updateTimer(){
     timer.innerText =
     `${minutes}:${seconds}`;
 }
+
+/* 기록 */
 
 function updateRecords(){
 
@@ -496,6 +506,8 @@ function updateRecords(){
     }
 }
 
+/* 시간 설정 */
+
 minutesInput.addEventListener("change", ()=>{
 
     let selected =
@@ -504,21 +516,48 @@ minutesInput.addEventListener("change", ()=>{
     if(selected > 50){
 
         selected = 50;
-
-        minutesInput.value = 50;
     }
 
     if(selected < 1){
 
         selected = 1;
-
-        minutesInput.value = 1;
     }
 
-    time = selected * 60;
+    minutesInput.value = selected;
 
-    updateTimer();
+    studyMinutes = selected;
+
+    if(!running && !isBreak){
+
+        time = studyMinutes * 60;
+
+        updateTimer();
+    }
 });
+
+/* 음악 재생 */
+
+function playAlarm(){
+
+    alarmSound.pause();
+
+    alarmSound.currentTime = 0;
+
+    alarmSound.volume = 1;
+
+    const playPromise =
+    alarmSound.play();
+
+    if(playPromise !== undefined){
+
+        playPromise.catch(error=>{
+
+            console.log("오디오 재생 실패", error);
+        });
+    }
+}
+
+/* 시작 버튼 */
 
 startBtn.addEventListener("click", ()=>{
 
@@ -538,12 +577,9 @@ startBtn.addEventListener("click", ()=>{
 
             running = false;
 
-            // 노래 재생
-            alarmSound.pause();
-            alarmSound.currentTime = 0;
-            alarmSound.volume = 1;
+            playAlarm();
 
-            alarmSound.play();
+            /* 공부 끝 */
 
             if(!isBreak){
 
@@ -554,9 +590,6 @@ startBtn.addEventListener("click", ()=>{
 
                     subjectName = "기타";
                 }
-
-                let studyMinutes =
-                Number(minutesInput.value);
 
                 if(!studyData[subjectName]){
 
@@ -573,7 +606,7 @@ startBtn.addEventListener("click", ()=>{
                 updateRecords();
 
                 message.innerText =
-                "눈을 쉬어주세요 😊";
+                "휴식 시간입니다 😊";
 
                 isBreak = true;
 
@@ -581,17 +614,20 @@ startBtn.addEventListener("click", ()=>{
 
                 updateTimer();
 
+                /* 자동으로 휴식 시작 */
+
+                startBtn.click();
+
             }else{
+
+                /* 휴식 끝 */
 
                 message.innerText =
                 "다시 공부 시작 📚";
 
                 isBreak = false;
 
-                let selected =
-                Number(minutesInput.value);
-
-                time = selected * 60;
+                time = studyMinutes * 60;
 
                 updateTimer();
             }
@@ -600,14 +636,19 @@ startBtn.addEventListener("click", ()=>{
     },1000);
 });
 
+/* 정지 */
+
 pauseBtn.addEventListener("click", ()=>{
 
     clearInterval(interval);
 
     running = false;
 
-    message.innerText = "타이머 정지";
+    message.innerText =
+    "타이머 정지";
 });
+
+/* 초기화 */
 
 resetBtn.addEventListener("click", ()=>{
 
@@ -617,16 +658,14 @@ resetBtn.addEventListener("click", ()=>{
 
     isBreak = false;
 
-    let selected =
-    Number(minutesInput.value);
-
-    time = selected * 60;
+    time = studyMinutes * 60;
 
     updateTimer();
 
     message.innerText = "";
 
     alarmSound.pause();
+
     alarmSound.currentTime = 0;
 });
 

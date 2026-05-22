@@ -124,7 +124,7 @@ button:hover{
     margin-bottom:12px;
 }
 
-/* 과목 입력 */
+/* 🔥 과목 입력창 */
 
 #subjectInput{
     width:250px;
@@ -239,7 +239,7 @@ button:hover{
 
         <h2>오늘의 공부 기록</h2>
 
-        <!-- 🔥 과목 입력창 다시 추가 -->
+        <!-- 🔥 입력창 다시 추가 -->
 
         <input type="text"
                id="subjectInput"
@@ -353,7 +353,7 @@ function updateTimer(){
     `${minutes}:${seconds}`;
 }
 
-/* 🔥 음악 재생 */
+/* 음악 재생 */
 
 function playAlarm(){
 
@@ -367,20 +367,11 @@ function playAlarm(){
     if(playPromise !== undefined){
 
         playPromise
-        .then(()=>{
-
-            console.log("노래 재생 성공");
-
-        })
         .catch(error=>{
 
             console.log(
                 "노래 재생 실패",
                 error
-            );
-
-            alert(
-                "mp3 파일 이름 확인해줘!"
             );
         });
     }
@@ -415,11 +406,9 @@ startBtn.addEventListener("click", ()=>{
 
             running = false;
 
-            /* 🔥 음악 재생 */
-
             playAlarm();
 
-            /* 🔥 공부 기록 추가 */
+            /* 공부 기록 추가 */
 
             if(!isBreak){
 
@@ -438,7 +427,7 @@ startBtn.addEventListener("click", ()=>{
                 recordList.appendChild(record);
             }
 
-            /* 공부 끝 → 휴식 */
+            /* 공부 → 휴식 */
 
             if(!isBreak){
 
@@ -458,8 +447,6 @@ startBtn.addEventListener("click", ()=>{
                 },1000);
 
             }else{
-
-                /* 휴식 끝 */
 
                 isBreak = false;
 

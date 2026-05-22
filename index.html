@@ -203,8 +203,6 @@ button:hover{
 
             <br><br>
 
-            <!-- 🔥 50분 제한 다시 넣음 -->
-
             <input type="number"
                    id="minutesInput"
                    min="1"
@@ -241,7 +239,7 @@ button:hover{
 
         <h2>오늘의 공부 기록</h2>
 
-        <!-- 🔥 입력창 -->
+        <!-- 입력창 -->
 
         <input type="text"
                id="subjectInput"
@@ -394,7 +392,7 @@ startBtn.addEventListener("click", ()=>{
 
     if(running) return;
 
-    /* 🔥 시작할 때 입력 시간 반영 */
+    /* 입력 시간 반영 */
 
     if(!isBreak){
 
@@ -418,12 +416,15 @@ startBtn.addEventListener("click", ()=>{
 
             playAlarm();
 
-            /* 공부 기록 */
+            /* 🔥 공부 시간 기록 */
 
             if(!isBreak){
 
                 const subject =
                 subjectInput.value || "기본";
+
+                const studyMinutes =
+                Number(minutesInput.value);
 
                 const record =
                 document.createElement("div");
@@ -432,7 +433,7 @@ startBtn.addEventListener("click", ()=>{
                 "record-item";
 
                 record.innerText =
-                `${subject} 공부 완료`;
+                `${subject} - ${studyMinutes}분 공부`;
 
                 recordList.appendChild(record);
             }

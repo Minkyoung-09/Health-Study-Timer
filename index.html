@@ -181,7 +181,7 @@ button:hover{
 
 <body>
 
-<!-- 🔥 음원 절대 안 건드림 -->
+<!-- 🔥 음원 -->
 
 <audio id="alarmSound">
     <source src="Stop The Time .mp3" type="audio/mpeg">
@@ -199,9 +199,11 @@ button:hover{
 
         <div class="time-setting">
 
-            공부 시간 설정 (최대 50분)
+            공부 시간 설정
 
             <br><br>
+
+            <!-- 🔥 50분 제한 다시 넣음 -->
 
             <input type="number"
                    id="minutesInput"
@@ -333,29 +335,6 @@ const breakTime = 10 * 60;
 
 let stream = null;
 
-/* 🔥 최대 50분 제한 */
-
-minutesInput.addEventListener("input", ()=>{
-
-    if(minutesInput.value > 50){
-
-        minutesInput.value = 50;
-    }
-
-    if(minutesInput.value < 1){
-
-        minutesInput.value = 1;
-    }
-
-    if(!running && !isBreak){
-
-        time =
-        Number(minutesInput.value) * 60;
-
-        updateTimer();
-    }
-});
-
 /* 타이머 표시 */
 
 function updateTimer(){
@@ -415,6 +394,14 @@ startBtn.addEventListener("click", ()=>{
 
     if(running) return;
 
+    /* 🔥 시작할 때 입력 시간 반영 */
+
+    if(!isBreak){
+
+        time =
+        Number(minutesInput.value) * 60;
+    }
+
     running = true;
 
     interval = setInterval(()=>{
@@ -431,7 +418,7 @@ startBtn.addEventListener("click", ()=>{
 
             playAlarm();
 
-            /* 공부 기록 추가 */
+            /* 공부 기록 */
 
             if(!isBreak){
 
@@ -470,6 +457,8 @@ startBtn.addEventListener("click", ()=>{
                 },1000);
 
             }else{
+
+                /* 휴식 → 공부 */
 
                 isBreak = false;
 

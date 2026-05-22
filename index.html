@@ -178,10 +178,10 @@ button:hover{
 
 <body>
 
-<!-- 알림 소리 -->
+<!-- 알림 음악 -->
 
 <audio id="alarmSound">
-    <source src="SE_10_09_클래식 환희 효과음.mp3" type="audio/mp3">
+    <source src="Stop The Time .mp3" type="audio/mp3">
 </audio>
 
 <div class="container">
@@ -238,7 +238,6 @@ button:hover{
 
         </div>
 
-        <!-- 기록 출력 -->
         <div id="recordList"></div>
 
     </div>
@@ -367,7 +366,7 @@ startBtn.addEventListener("click", ()=>{
 
                 updateRecords();
 
-                /* 작은 소리 실행 */
+                /* 알림 음악 */
 
                 alarmSound.volume = 0.1;
 

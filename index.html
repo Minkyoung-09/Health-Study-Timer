@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="ko">
-
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,9 +11,8 @@
 body{
     margin:0;
     padding:40px;
-    min-height:100vh;
     background:#EEF4F8;
-    font-family:Arial, sans-serif;
+    font-family:Arial,sans-serif;
     box-sizing:border-box;
 }
 
@@ -23,13 +21,13 @@ body{
     margin:auto;
     display:flex;
     gap:30px;
-    align-items:flex-start;
     background:#FDFEFE;
     padding:40px;
     border-radius:25px;
     box-shadow:0 8px 25px rgba(120,140,160,0.12);
-    border:1px solid #E3ECF3;
 }
+
+/* 왼쪽 */
 
 .left-panel{
     width:430px;
@@ -62,7 +60,6 @@ input{
     background:#FAFCFE;
     text-align:center;
     font-size:16px;
-    color:#5A6C79;
     outline:none;
 }
 
@@ -81,7 +78,6 @@ input{
 .button-group{
     display:flex;
     gap:12px;
-    margin-top:20px;
 }
 
 button{
@@ -89,39 +85,32 @@ button{
     padding:15px 25px;
     border-radius:14px;
     font-size:18px;
-    font-weight:600;
     cursor:pointer;
     transition:0.2s;
 }
 
 button:hover{
     transform:scale(1.03);
-    opacity:0.92;
 }
 
 #startBtn{
     background:#D7EAF6;
-    color:#4F6573;
 }
 
 #pauseBtn{
     background:#E1EEF5;
-    color:#5A6F7D;
 }
 
 #resetBtn{
     background:#EDF3F8;
-    color:#647887;
 }
 
 #message{
-    margin-top:25px;
-    min-height:30px;
-    font-size:20px;
-    color:#6F7F8B;
-    background:#F6FAFD;
+    margin-top:20px;
     padding:12px;
-    border-radius:14px;
+    border-radius:12px;
+    background:#F6FAFD;
+    color:#6F7F8B;
 }
 
 /* 오른쪽 */
@@ -132,7 +121,6 @@ button:hover{
     background:#F5F9FC;
     border-radius:20px;
     padding:25px;
-    border:1px solid #E2EBF2;
     position:relative;
     overflow:hidden;
 }
@@ -143,18 +131,11 @@ button:hover{
 }
 
 .add-subject{
-    margin-top:20px;
     margin-bottom:20px;
 }
 
 .add-subject input{
     width:250px;
-    padding:12px;
-    border-radius:12px;
-    border:1px solid #D6E2EC;
-    background:white;
-    font-size:16px;
-    color:#5A6C79;
     text-align:left;
 }
 
@@ -164,26 +145,75 @@ button:hover{
     border-radius:14px;
     margin-bottom:12px;
     color:#60707D;
-    font-size:18px;
-    box-shadow:0 2px 8px rgba(0,0,0,0.03);
+}
+
+/* 카메라 */
+
+.camera-box{
+
+    position:absolute;
+
+    top:180px;
+
+    right:210px;
+
+    width:320px;
+
+    height:470px;
+
+    background:white;
+
+    padding:10px;
+
+    border-radius:18px;
+
+    box-shadow:0 2px 10px rgba(0,0,0,0.05);
+
+    overflow:hidden;
+}
+
+.camera-box h3{
+    margin-top:0;
+    margin-bottom:10px;
+    color:#5D7382;
+}
+
+#camera{
+
+    width:100%;
+
+    height:calc(100% - 35px);
+
+    object-fit:cover;
+
+    border-radius:14px;
+
+    background:black;
 }
 
 /* 목표 사진 */
 
 .right-image-box{
+
     position:absolute;
+
     bottom:20px;
+
     right:20px;
+
     width:160px;
+
     background:white;
+
     padding:10px;
+
     border-radius:16px;
+
     box-shadow:0 2px 8px rgba(0,0,0,0.05);
 }
 
 .right-image-box h3{
     margin-top:0;
-    margin-bottom:10px;
     font-size:14px;
     color:#5D7382;
 }
@@ -200,63 +230,11 @@ button:hover{
     display:none;
 }
 
-/* 카메라 */
-
-.camera-box{
-    position:absolute;
-
-    top:250px;
-
-    right:200px;
-
-    width:320px;
-
-    height:420px;
-
-    background:white;
-
-    padding:10px;
-
-    border-radius:18px;
-
-    box-shadow:0 2px 10px rgba(0,0,0,0.05);
-
-    overflow:hidden;
-}
-
-.camera-box h3{
-    margin-top:0;
-    margin-bottom:10px;
-    font-size:15px;
-    color:#5D7382;
-}
-
-/* 꽉차는 카메라 */
-
-#camera{
-
-    width:100%;
-
-    height:calc(100% - 35px);
-
-    object-fit:cover;
-
-    border-radius:14px;
-
-    background:black;
-}
-
-.break{
-    background:#EAF4FB;
-}
-
 </style>
-
 </head>
 
 <body>
 
-<!-- 알림 음악 -->
 <audio id="alarmSound" preload="auto">
     <source src="./alarm.mp3" type="audio/mp3">
 </audio>
@@ -269,7 +247,7 @@ button:hover{
 
         <h1>Silent Study Timer</h1>
 
-        <p>조용한 환경을 위한 건강 중심 공부 타이머</p>
+        <p>조용한 환경을 위한 공부 타이머</p>
 
         <div class="time-setting">
 
@@ -446,13 +424,15 @@ async function startCamera(){
 
     }catch(error){
 
-        console.log("카메라 오류:", error);
+        console.log(error);
 
         alert("카메라 권한을 허용해주세요.");
     }
 }
 
 startCamera();
+
+/* 타이머 */
 
 function updateTimer(){
 
@@ -545,9 +525,7 @@ startBtn.addEventListener("click", ()=>{
                 updateRecords();
 
                 alarmSound.pause();
-
                 alarmSound.currentTime = 0;
-
                 alarmSound.volume = 0.1;
 
                 setTimeout(() => {
@@ -555,8 +533,6 @@ startBtn.addEventListener("click", ()=>{
                     alarmSound.play();
 
                 }, 100);
-
-                document.body.classList.add("break");
 
                 message.innerText =
                 "눈을 쉬어주세요 😊";
@@ -570,8 +546,6 @@ startBtn.addEventListener("click", ()=>{
                 startBtn.click();
 
             }else{
-
-                document.body.classList.remove("break");
 
                 message.innerText =
                 "다시 공부를 시작하세요 📚";
@@ -615,8 +589,6 @@ resetBtn.addEventListener("click", ()=>{
     updateTimer();
 
     message.innerText = "";
-
-    document.body.classList.remove("break");
 });
 
 updateTimer();
@@ -625,5 +597,4 @@ updateRecords();
 </script>
 
 </body>
-
 </html>

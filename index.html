@@ -147,13 +147,13 @@ button:hover{
     color:#60707D;
 }
 
-/* 카메라 크게 */
+/* 카메라 */
 
 .camera-box{
 
     position:absolute;
 
-    bottom:20px;
+    bottom:80px;
 
     left:20px;
 
@@ -182,7 +182,6 @@ button:hover{
 
     background:black;
 
-    /* 좌우반전 */
     transform:scaleX(-1);
 }
 
@@ -417,7 +416,7 @@ async function startCamera(){
 
         camera.srcObject = stream;
 
-        // 좌우반전
+        /* 좌우반전 */
         camera.style.transform = "scaleX(-1)";
 
     }catch(error){

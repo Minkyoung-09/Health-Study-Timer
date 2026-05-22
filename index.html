@@ -19,7 +19,7 @@ body{
 }
 
 .container{
-    width:1100px;
+    width:1200px;
     margin:auto;
     display:flex;
     gap:30px;
@@ -124,11 +124,38 @@ button:hover{
     border-radius:14px;
 }
 
+/* 이미지 업로드 */
+
+.image-box{
+    margin-top:25px;
+    background:white;
+    padding:15px;
+    border-radius:18px;
+    box-shadow:0 2px 8px rgba(0,0,0,0.03);
+}
+
+.image-box h3{
+    margin-top:0;
+    color:#5D7382;
+}
+
+#imageUpload{
+    width:100%;
+    background:#F5F9FC;
+}
+
+#previewImage{
+    width:100%;
+    margin-top:15px;
+    border-radius:15px;
+    display:none;
+}
+
 /* 오른쪽 */
 
 .study-record{
     flex:1;
-    min-height:600px;
+    min-height:700px;
     background:#F5F9FC;
     border-radius:20px;
     padding:25px;
@@ -155,8 +182,6 @@ button:hover{
     color:#5A6C79;
     text-align:left;
 }
-
-/* 기록 카드 */
 
 .record-item{
     background:white;
@@ -222,6 +247,20 @@ button:hover{
 
         <div id="message"></div>
 
+        <!-- 이미지 업로드 -->
+
+        <div class="image-box">
+
+            <h3>공부 목표 이미지</h3>
+
+            <input type="file"
+                   id="imageUpload"
+                   accept="image/*">
+
+            <img id="previewImage">
+
+        </div>
+
     </div>
 
     <!-- 오른쪽 -->
@@ -257,6 +296,14 @@ const recordList = document.getElementById("recordList");
 const alarmSound =
 document.getElementById("alarmSound");
 
+/* 이미지 */
+
+const imageUpload =
+document.getElementById("imageUpload");
+
+const previewImage =
+document.getElementById("previewImage");
+
 let time = 60;
 let breakTime = 600;
 
@@ -268,6 +315,48 @@ let isBreak = false;
 
 let studyData =
 JSON.parse(localStorage.getItem("studyData")) || {};
+
+/* 저장된 이미지 불러오기 */
+
+const savedImage =
+localStorage.getItem("studyImage");
+
+if(savedImage){
+
+    previewImage.src = savedImage;
+
+    previewImage.style.display = "block";
+}
+
+/* 이미지 업로드 */
+
+imageUpload.addEventListener("change",(event)=>{
+
+    const file =
+    event.target.files[0];
+
+    if(file){
+
+        const reader =
+        new FileReader();
+
+        reader.onload = function(e){
+
+            previewImage.src =
+            e.target.result;
+
+            previewImage.style.display =
+            "block";
+
+            localStorage.setItem(
+                "studyImage",
+                e.target.result
+            );
+        };
+
+        reader.readAsDataURL(file);
+    }
+});
 
 function updateTimer(){
 
@@ -336,16 +425,12 @@ startBtn.addEventListener("click", ()=>{
 
             if(!isBreak){
 
-                /* 과목명 */
-
                 let subjectName =
                 subject.value.trim();
 
                 if(subjectName === ""){
                     subjectName = "기타";
                 }
-
-                /* 공부 시간 저장 */
 
                 let studyMinutes =
                 Number(minutesInput.value);
@@ -363,15 +448,19 @@ startBtn.addEventListener("click", ()=>{
 
                 updateRecords();
 
-                /* 알림 음악 재생 */
+                /* 알림 음악 */
 
-                alarmSound.volume = 0.1;
+                alarmSound.pause();
 
                 alarmSound.currentTime = 0;
 
-                alarmSound.play().catch(error => {
-                    console.log(error);
-                });
+                alarmSound.volume = 0.1;
+
+                setTimeout(() => {
+
+                    alarmSound.play();
+
+                }, 100);
 
                 /* 휴식 시작 */
 
